@@ -2,7 +2,7 @@
 
 			R M N E T C L I . C
 
-Copyright (c) 2013-2015, 2017-2018 The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2015, 2017-2019 The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -218,10 +218,16 @@ static void rmnet_api_usage(void)
 	printf(_2TABS" <vnd>                   string - vnd device_name");
 	printf(_2TABS" <vnd id>                int - new vnd id");
 	printf(_2TABS" <flags>                 int - new flag config\n\n");
+	printf("rmnetcli -n getlink <dev_name>           Get device config\n\n");
 	printf("rmnetcli -n dellink <dev_name>           Delete a vnd");
 	printf(_2TABS"                         by inputting dev name\n\n");
 	printf("rmnetcli -n bridgelink  <dev_name>       Bridge a vnd and a dev");
 	printf(_2TABS" <vnd id>                by specifying dev id and vnd id\n\n");
+	printf("rmnetcli -n uplinkparam <dev_name>   set uplink aggregation parameters");
+	printf(_2TABS" <vnd id>                string - vnd device_name");
+	printf(_2TABS" <packet count>          int - maximum packet count");
+	printf(_2TABS" <byte count>            int - maximum byte count");
+	printf(_2TABS" <time limit>            int - maximum time limit\n\n");
 	printf("rmnetcli -n flowactivate <real dev>  activate a flow\n");
 	printf(_2TABS" <vnd_name>              string - vnd device name\n\n");
 	printf(_2TABS" <bearer_id>             int - bearer id\n\n");
@@ -246,7 +252,12 @@ static void rmnet_api_usage(void)
 	printf(_2TABS" <iface_id>              int - iface id\n\n");
 	printf(_2TABS" <flags>                 int - flags\n\n");
 	printf("rmnetcli -n systemdown    <real dev> <vnd name> <instance>\n\n ");
-
+	printf("rmnetcli -n qmiscale      <real dev> set ACK scale factor\n\n");
+	printf(_2TABS" <vnd_name>              string - vnd device name\n\n");
+	printf(_2TABS" <scale>                 int - scale factor\n\n");
+	printf("rmnetcli -n wdafreq       <real dev> set powersave poll freq\n\n");
+	printf(_2TABS" <vnd_name>              string - vnd device name\n\n");
+	printf(_2TABS" <freq>                  int - frequency\n\n");
 
 }
 
@@ -359,6 +370,28 @@ static int rmnet_api_call(int argc, char *argv[])
 							    &error_number,
 							    _STRTOI32(argv[3]),
 							    _STRTOI32(argv[4]));
+		} else if (!strcmp(*argv, "getlink")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			uint32_t flags = 0;
+			uint16_t mux_id = 0;
+			uint16_t agg_count = 0;
+			uint16_t agg_size = 0;
+			uint32_t agg_time = 0;
+
+			return_code = rtrmnet_ctl_getvnd(handle, argv[1],
+							 &error_number,
+							 &mux_id, &flags,
+							 &agg_count, &agg_size,
+							 &agg_time);
+			if (return_code == RMNETCTL_API_SUCCESS) {
+				printf("Configuration for device %s:\n", argv[1]);
+				printf("\tMux id: %d\n", mux_id);
+				printf("\tData format: 0x%04x\n", flags);
+				printf("\tUplink Aggregation parameters:\n");
+				printf("\t\tPacket limit: %d\n", agg_count);
+				printf("\t\tByte limit: %d\n", agg_size);
+				printf("\t\tTime limit (ns): %d\n", agg_time);
+			}
 		} else if (!strcmp(*argv, "dellink")) {
 			_RMNETCLI_CHECKNULL(argv[1]);
 				return_code = rtrmnet_ctl_delvnd(handle, argv[1],
@@ -369,6 +402,17 @@ static int rmnet_api_call(int argc, char *argv[])
 			return_code = rtrmnet_ctl_bridgevnd(handle, argv[1],
 							    argv[2],
 							    &error_number);
+		} else if (!strcmp(*argv, "uplinkparam")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
+			_RMNETCLI_CHECKNULL(argv[4]);
+			_RMNETCLI_CHECKNULL(argv[5]);
+
+			return_code = rtrmnet_set_uplink_aggregation_params(
+				handle, argv[1], argv[2], _STRTOUI8(argv[3]),
+				_STRTOUI16(argv[4]), _STRTOUI32(argv[5]),
+				&error_number);
 		}
 		else if (!strcmp(*argv, "flowactivate")) {
 			_RMNETCLI_CHECKNULL(argv[1]);
@@ -433,6 +477,22 @@ static int rmnet_api_call(int argc, char *argv[])
 			return_code = rtrmnet_flow_state_down(handle, argv[1], argv[2],
 							    _STRTOUI32(argv[3]),
 							    &error_number);
+		} else if (!strcmp(*argv, "qmiscale")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
+
+			return_code = rtrmnet_set_qmi_scale(handle, argv[1], argv[2],
+							    _STRTOUI32(argv[3]),
+							    &error_number);
+		} else if (!strcmp(*argv, "wdafreq")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
+
+			return_code = rtrmnet_set_wda_freq(handle, argv[1], argv[2],
+							   _STRTOUI32(argv[3]),
+							   &error_number);
 		}
 
 
