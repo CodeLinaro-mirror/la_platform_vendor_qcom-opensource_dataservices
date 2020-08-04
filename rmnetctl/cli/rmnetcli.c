@@ -2,7 +2,7 @@
 
 			R M N E T C L I . C
 
-Copyright (c) 2013-2015, 2018-2019 The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2015, 2018-2020 The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -246,7 +246,7 @@ static void rmnet_api_usage(void)
 	printf(_2TABS" <iface_id>              int - iface id\n\n");
 	printf(_2TABS" <flags>                 int - flags\n\n");
 	printf("rmnetcli -n systemdown    <real dev> <vnd name> <instance>\n\n ");
-
+	printf("rmnetcli -n setethhdr     <real dev> <vnd name> <src mac> <dst mac>\n\n");
 
 }
 
@@ -433,6 +433,18 @@ static int rmnet_api_call(int argc, char *argv[])
 			return_code = rtrmnet_flow_state_down(handle, argv[1], argv[2],
 							    _STRTOUI32(argv[3]),
 							    &error_number);
+		} else if (!strcmp(*argv, "setethhdr")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
+			_RMNETCLI_CHECKNULL(argv[4]);
+
+			return_code = rtrmnet_set_eth_hdr_params(handle,
+								argv[1],
+								argv[2],
+								(unsigned char *) argv[3],
+								(unsigned char *) argv[4],
+								&error_number);
 		}
 
 

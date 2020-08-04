@@ -2,7 +2,7 @@
 
 			L I B R M N E T C T L . C
 
-Copyright (c) 2013-2015, 2018-2019 The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2015, 2018-2020 The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -102,6 +102,15 @@ struct nlmsg {
  * do not have this definition
  */
 #define RMNET_IFLA_NUM_TX_QUEUES 31
+
+#define RMNET_IFLA_ETH 5
+#define MAX_MAC_ADDR_LEN 32
+
+struct rmnet_eth_hdr_info
+{
+  unsigned char src_mac_addr[MAX_MAC_ADDR_LEN];
+  unsigned char dst_mac_addr[MAX_MAC_ADDR_LEN];
+};
 
 /*===========================================================================
 			LOCAL FUNCTION DEFINITIONS
@@ -1993,6 +2002,121 @@ int rtrmnet_flow_state_down(rmnetctl_hndl_t *hndl,
 	linkinfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)linkinfo;
 
 	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0) {
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	return rmnet_get_ack(hndl, error_code);
+}
+
+int rtrmnet_set_eth_hdr_params(rmnetctl_hndl_t *hndl,
+				char *devname,
+				char *vndname,
+				unsigned char *src_mac_addr,
+				unsigned char *dst_mac_addr,
+				uint16_t *error_code)
+{
+	struct nlmsg req;
+	struct rmnet_eth_hdr_info eth_params;
+	struct rtattr *attrinfo, *datainfo, *linkinfo;
+	char *kind = "rmnet";
+	unsigned int devindex = 0, val = 0;
+	size_t reqsize = 0;
+	size_t bytes = 0;
+
+	if (!hndl || !devname || !vndname || !error_code || !src_mac_addr || !dst_mac_addr ||
+	    _rmnetctl_check_dev_name(vndname) || _rmnetctl_check_dev_name(devname))
+		return RMNETCTL_INVALID_ARG;
+
+	memset(&req, 0, sizeof(req));
+	memset(&eth_params, 0, sizeof(eth_params));
+
+	reqsize = NLMSG_DATA_SIZE - sizeof(*attrinfo);
+	req.nl_addr.nlmsg_type = RTM_NEWLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of devname*/
+	devindex = if_nametoindex(devname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	/* Setup link attr with devindex as data */
+	val = devindex;
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+					 attrinfo->rta_type = IFLA_LINK;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, &val, sizeof(val)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+
+	/* Set up IFLA info kind  RMNET that has linkinfo and type */
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	attrinfo->rta_type =  IFLA_IFNAME;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, vndname, strlen(vndname) + 1));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+
+	linkinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	linkinfo->rta_type = IFLA_LINKINFO;
+	linkinfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	attrinfo->rta_type =  IFLA_INFO_KIND;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, kind, strlen(kind)));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+
+	datainfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	datainfo->rta_type =  IFLA_INFO_DATA;
+	datainfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	bytes = memscpy((void *) eth_params.src_mac_addr, MAX_MAC_ADDR_LEN,
+			(void*) src_mac_addr, MAX_MAC_ADDR_LEN);
+	if (MAX_MAC_ADDR_LEN < bytes)
+		return RMNETCTL_LIB_ERR;
+
+	bytes = memscpy((void *) eth_params.dst_mac_addr, MAX_MAC_ADDR_LEN,
+			(void*) dst_mac_addr, MAX_MAC_ADDR_LEN);
+	if (MAX_MAC_ADDR_LEN < bytes)
+                return RMNETCTL_LIB_ERR;
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+					NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	/* Copy ETH header information */
+	attrinfo->rta_type = RMNET_IFLA_ETH;
+	attrinfo->rta_len = RTA_LENGTH(sizeof(eth_params));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize,
+			&eth_params, sizeof(eth_params)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+					RTA_ALIGN(RTA_LENGTH(sizeof(eth_params)));
+
+	datainfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)datainfo;
+	linkinfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)linkinfo;
+
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0)
+	{
 		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
 		return RMNETCTL_LIB_ERR;
 	}
