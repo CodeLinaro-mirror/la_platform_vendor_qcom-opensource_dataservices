@@ -31,6 +31,42 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
 
+/*
+ *  Changes from Qualcomm Innovation Center are provided under the following license:
+ *
+ *  Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted (subject to the limitations in the
+ *  disclaimer below) provided that the following conditions are met:
+ *
+ *      * Redistributions of source code must retain the above copyright
+ *        notice, this list of conditions and the following disclaimer.
+ *
+ *      * Redistributions in binary form must reproduce the above
+ *        copyright notice, this list of conditions and the following
+ *        disclaimer in the documentation and/or other materials provided
+ *        with the distribution.
+ *
+ *      * Neither the name of Qualcomm Innovation Center, Inc. nor the names of its
+ *        contributors may be used to endorse or promote products derived
+ *        from this software without specific prior written permission.
+ *
+ *  NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+ *  GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+ *  HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+ *   WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ *  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ *  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ *  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ *  IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+ *  IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 /*!
 * @file    librmnetctl.c
 * @brief   rmnet control API's implementation file
@@ -1009,6 +1045,47 @@ int rmnet_add_del_vnd_tc_flow(rmnetctl_hndl_t *hndl,
 		break;
 	return_code = _rmnetctl_set_codes(response.return_code, error_code);
 	} while(0);
+	return return_code;
+}
+
+int rmnet_get_id_from_vnd(rmnetctl_hndl_t *hndl,
+                          const char *dev_name,
+                          uint32_t *id,
+                          uint16_t *error_code)
+{
+	struct rmnet_nl_msg_s request, response;
+	uint32_t str_len;
+	int return_code = RMNETCTL_LIB_ERR;
+	do {
+		if((!hndl) || (!error_code) || _rmnetctl_check_dev_name(dev_name)) {
+			return_code = RMNETCTL_INVALID_ARG;
+			break;
+		}
+
+		request.message_type = RMNET_NETLINK_GET_ID_FROM_VND;
+		request.arg_length = RMNET_MAX_STR_LEN;
+		str_len = (uint32_t)strlcpy((char *)(request.vnd.vnd_name),
+					    dev_name,
+					    (size_t)RMNET_MAX_STR_LEN);
+		if(_rmnetctl_check_len(str_len, error_code) != RMNETCTL_SUCCESS)
+			break;
+
+		if ((*error_code = rmnetctl_transact(hndl, &request, &response))
+				!= RMNETCTL_SUCCESS)
+			break;
+
+		if (_rmnetctl_check_data(response.crd, error_code)
+				!= RMNETCTL_SUCCESS) {
+			if (_rmnetctl_check_code(response.crd, error_code)
+					== RMNETCTL_SUCCESS)
+				return_code = _rmnetctl_set_codes(response.return_code,
+						error_code);
+			break;
+		}
+
+		*id = response.vnd.id;
+		return_code = RMNETCTL_SUCCESS;
+	}while(0);
 	return return_code;
 }
 
