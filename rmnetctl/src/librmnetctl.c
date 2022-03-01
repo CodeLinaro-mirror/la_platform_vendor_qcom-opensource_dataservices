@@ -2,7 +2,7 @@
 
 			L I B R M N E T C T L . C
 
-Copyright (c) 2013-2015, 2017-2019 The Linux Foundation. All rights reserved.
+Copyright (c) 2013-2015, 2017-2021 The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -27,6 +27,40 @@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
 BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Changes from Qualcomm Innovation Center are provided under the following license:
+
+Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted (subject to the limitations in the
+disclaimer below) provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the name of Qualcomm Innovation Center, Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ******************************************************************************/
@@ -110,6 +144,7 @@ enum {
 	RMNETCTL_IFLA_FLAGS,
 	RMNETCTL_IFLA_DFC_QOS,
 	RMNETCTL_IFLA_UPLINK_PARAMS,
+	RMNETCTL_IFLA_NSS_OFFLOAD,
 	__RMNETCTL_IFLA_MAX,
 };
 
@@ -129,6 +164,10 @@ enum {
 	RMNET_FLOW_MSG_QMI_SCALE = 6,
 	/* Change powersave workqueue polling freq */
 	RMNET_FLOW_MSG_WDA_FREQ = 7,
+	/* Add a filter */
+	RMNET_FLOW_MSG_ADD_FILTER = 10,
+	/* Remove filters */
+	RMNET_FLOW_MSG_REMOVE_FILTERS = 11,
 };
 
 /* 0 reserved, 1-15 for data, 16-30 for acks */
@@ -1066,6 +1105,14 @@ static int rta_put(struct nlmsg *req, size_t *reqsize, int type, int len,
 	return RMNETCTL_SUCCESS;
 }
 
+#ifdef TARGET_IPQ
+static int rta_put_u8(struct nlmsg *req, size_t *reqsize, int type,
+		       uint8_t data)
+{
+	return rta_put(req, reqsize, type, sizeof(data), &data);
+}
+#endif
+
 /* @brief Add an RTA to the Netlink message with a u16 data
  * @param *req The Netlink message
  * @param *reqsize The remainins space within the Netlink message
@@ -1168,9 +1215,18 @@ static struct rtattr *rta_find(struct rtattr *rta, int attrlen, uint16_t type)
  * @return RMNETCTL_LIB_ERR if there is not enough space to add all RTAs
  * @return RMNETCTL_SUCCESS if everything was added successfully
  */
+#ifdef TARGET_IPQ
 static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
 				  unsigned int devindex, char *vndname,
-				  uint8_t index, uint32_t flagconfig)
+				  uint8_t index, uint32_t flagconfig,
+				  uint8_t offload)
+#else
+static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
+				  unsigned int devindex, char *vndname,
+				  uint8_t index,
+                  uint32_t flagconfig)
+#endif
+
 {
 	struct rtattr *linkinfo, *datainfo;
 	struct ifla_vlan_flags flags;
@@ -1211,6 +1267,11 @@ static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
 		if (rc != RMNETCTL_SUCCESS)
 			return rc;
 	}
+#ifdef TARGET_IPQ
+	rc = rta_put_u8(req, reqsize, RMNETCTL_IFLA_NSS_OFFLOAD, offload);
+	if (rc != RMNETCTL_SUCCESS)
+		return rc;
+#endif
 
 	rta_nested_end(req, datainfo);
 	rta_nested_end(req, linkinfo);
@@ -1230,7 +1291,7 @@ static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
  */
 static int rmnet_fill_flow_msg(struct nlmsg *req, size_t *reqsize,
 			       unsigned int devindex, char *vndname,
-			       struct tcmsg *flowinfo)
+			       char *flowinfo, size_t flowlen)
 {
 	struct rtattr *linkinfo, *datainfo;
 	int rc;
@@ -1257,7 +1318,7 @@ static int rmnet_fill_flow_msg(struct nlmsg *req, size_t *reqsize,
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
-	rc = rta_put(req, reqsize, RMNETCTL_IFLA_DFC_QOS, sizeof(*flowinfo),
+	rc = rta_put(req, reqsize, RMNETCTL_IFLA_DFC_QOS, flowlen,
 		     flowinfo);
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
@@ -1386,9 +1447,16 @@ int rtrmnet_ctl_deinit(rmnetctl_hndl_t *hndl)
 	return RMNETCTL_SUCCESS;
 }
 
+#ifdef TARGET_IPQ
+int rtrmnet_ctl_newvnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
+		       uint16_t *error_code, uint8_t  index,
+		       uint32_t flagconfig, uint8_t offload)
+#else
 int rtrmnet_ctl_newvnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 		       uint16_t *error_code, uint8_t  index,
 		       uint32_t flagconfig)
+#endif
+
 {
 	unsigned int devindex = 0;
 	struct nlmsg req;
@@ -1421,8 +1489,15 @@ int rtrmnet_ctl_newvnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
+#ifdef TARGET_IPQ
+
+	rc = rmnet_fill_newlink_msg(&req, &reqsize, devindex, vndname, index,
+				    flagconfig, offload);
+#else
 	rc = rmnet_fill_newlink_msg(&req, &reqsize, devindex, vndname, index,
 				    flagconfig);
+#endif
+
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
@@ -1468,9 +1543,17 @@ int rtrmnet_ctl_delvnd(rmnetctl_hndl_t *hndl, char *vndname,
 }
 
 
+#ifdef TARGET_IPQ
+int rtrmnet_ctl_changevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
+			  uint16_t *error_code, uint8_t  index,
+			  uint32_t flagconfig, uint8_t offload)
+#else
+
 int rtrmnet_ctl_changevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 			  uint16_t *error_code, uint8_t  index,
 			  uint32_t flagconfig)
+#endif
+
 {
 	struct nlmsg req;
 	unsigned int devindex = 0;
@@ -1497,8 +1580,14 @@ int rtrmnet_ctl_changevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 		return RMNETCTL_KERNEL_ERR;
 	}
 
+#ifdef TARGET_IPQ
+	rc = rmnet_fill_newlink_msg(&req, &reqsize, devindex, vndname, index,
+				    flagconfig, offload);
+#else
 	rc = rmnet_fill_newlink_msg(&req, &reqsize, devindex, vndname, index,
 				    flagconfig);
+#endif
+
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -1512,11 +1601,20 @@ int rtrmnet_ctl_changevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 	return rmnet_get_ack(hndl, error_code);
 }
 
+#ifdef TARGET_IPQ
+int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
+		       uint16_t *error_code, uint16_t *mux_id,
+		       uint32_t *flagconfig, uint8_t *agg_count,
+		       uint16_t *agg_size, uint32_t *agg_time,
+		       uint8_t *features, uint8_t *offload)
+#else
 int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 		       uint16_t *error_code, uint16_t *mux_id,
 		       uint32_t *flagconfig, uint8_t *agg_count,
 		       uint16_t *agg_size, uint32_t *agg_time,
 		       uint8_t *features)
+#endif
+
 {
 	struct nlmsg req;
 	struct nlmsghdr *resp;
@@ -1618,6 +1716,10 @@ int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 		if (agg_time)
 			*agg_time = ul_agg->time_limit;
 	}
+#ifdef TARGET_IPQ
+	if (tb[RMNETCTL_IFLA_NSS_OFFLOAD] && offload)
+		*offload = *((uint8_t *)RTA_DATA(tb[RMNETCTL_IFLA_NSS_OFFLOAD]));
+#endif
 
 	free(resp);
 	return RMNETCTL_API_SUCCESS;
@@ -1806,7 +1908,8 @@ int rtrmnet_activate_flow(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_ifindex = ip_type;
 	flowinfo.tcm_parent = flow_id;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -1861,7 +1964,8 @@ int rtrmnet_delete_flow(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm__pad1 = bearer_id;
 	flowinfo.tcm_parent = flow_id;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -1917,7 +2021,8 @@ int rtrmnet_control_flow(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_parent = ack;
 	flowinfo.tcm_info = grantsize;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -1974,7 +2079,8 @@ int rtrmnet_flow_state_up(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_parent = ifaceid;
 	flowinfo.tcm_info = ep_type;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -2025,7 +2131,8 @@ int rtrmnet_flow_state_down(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_handle = instance;
 	flowinfo.tcm_family = RMNET_FLOW_MSG_DOWN;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -2075,7 +2182,8 @@ int rtrmnet_set_qmi_scale(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_ifindex = scale;
 	flowinfo.tcm_family = RMNET_FLOW_MSG_QMI_SCALE;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -2125,7 +2233,66 @@ int rtrmnet_set_wda_freq(rmnetctl_hndl_t *hndl,
 	flowinfo.tcm_ifindex = freq;
 	flowinfo.tcm_family = RMNET_FLOW_MSG_WDA_FREQ;
 
-	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname, &flowinfo);
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
+
+	if (rc != RMNETCTL_SUCCESS) {
+		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
+		return rc;
+	}
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0) {
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	return rmnet_get_ack(hndl, error_code);
+}
+
+int rtrmnet_add_filter(rmnetctl_hndl_t *hndl,
+		       char *devname,
+		       char *vndname,
+		       uint32_t flow_id,
+		       int ip_type,
+		       struct rmnetctl_filter *filter,
+		       uint16_t *error_code)
+{
+	struct {
+		struct tcmsg tcm;
+		struct rmnetctl_filter filter;
+	} flowinfo;
+	struct nlmsg req;
+	unsigned int devindex = 0;
+	size_t reqsize;
+	int rc;
+
+	memset(&req, 0, sizeof(req));
+	memset(&flowinfo, 0, sizeof(flowinfo));
+
+	if (!hndl || !devname || !error_code ||_rmnetctl_check_dev_name(devname) ||
+		_rmnetctl_check_dev_name(vndname) || !filter)
+		return RMNETCTL_INVALID_ARG;
+
+	reqsize = NLMSG_DATA_SIZE - sizeof(struct rtattr);
+	req.nl_addr.nlmsg_type = RTM_NEWLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of devname*/
+	devindex = if_nametoindex(devname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	flowinfo.tcm.tcm_family = RMNET_FLOW_MSG_ADD_FILTER;
+	flowinfo.tcm.tcm_ifindex = ip_type;
+	flowinfo.tcm.tcm_parent = flow_id;
+	memcpy(&flowinfo.filter, filter, sizeof(struct rmnetctl_filter));
+
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
 	if (rc != RMNETCTL_SUCCESS) {
 		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
 		return rc;
@@ -2138,3 +2305,58 @@ int rtrmnet_set_wda_freq(rmnetctl_hndl_t *hndl,
 
 	return rmnet_get_ack(hndl, error_code);
 }
+
+int rtrmnet_remove_filters(rmnetctl_hndl_t *hndl,
+			   char *devname,
+			   char *vndname,
+			   uint32_t flow_id,
+			   int ip_type,
+			   uint16_t *error_code)
+{
+	struct tcmsg flowinfo;
+	struct nlmsg req;
+	unsigned int devindex = 0;
+	size_t reqsize;
+	int rc;
+
+	memset(&req, 0, sizeof(req));
+	memset(&flowinfo, 0, sizeof(flowinfo));
+
+	if (!hndl || !devname || !error_code ||_rmnetctl_check_dev_name(devname) ||
+		_rmnetctl_check_dev_name(vndname))
+		return RMNETCTL_INVALID_ARG;
+
+	reqsize = NLMSG_DATA_SIZE - sizeof(struct rtattr);
+	req.nl_addr.nlmsg_type = RTM_NEWLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of devname*/
+	devindex = if_nametoindex(devname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	flowinfo.tcm_family = RMNET_FLOW_MSG_REMOVE_FILTERS;
+	flowinfo.tcm_ifindex = ip_type;
+	flowinfo.tcm_parent = flow_id;
+
+	rc = rmnet_fill_flow_msg(&req, &reqsize, devindex, vndname,
+				 (char *)&flowinfo, sizeof(flowinfo));
+	if (rc != RMNETCTL_SUCCESS) {
+		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
+		return rc;
+	}
+
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0) {
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	return rmnet_get_ack(hndl, error_code);
+}
+
+
