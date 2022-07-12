@@ -29,6 +29,10 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Changes from Qualcomm Innovation Center are provided under the following license:
+Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause-Clear
+
 ******************************************************************************/
 
 /*!
@@ -651,6 +655,12 @@ int rtrmnet_set_eth_hdr_params(rmnetctl_hndl_t *hndl,
 			unsigned char *src_mac_addr,
 			unsigned char *dst_mac_addr,
 			uint16_t *error_code);
+
+int rtrmnet_associate_call_type(rmnetctl_hndl_t *hndl,
+				char *devname,
+				char *vndname,
+				uint8_t call_type,
+				uint16_t *error_code);
 
 #endif /* not defined LIBRMNETCTL_H */
 
