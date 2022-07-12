@@ -33,7 +33,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
  *  Changes from Qualcomm Innovation Center are provided under the following license:
  *
- *  Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted (subject to the limitations in the
@@ -342,6 +342,12 @@ int rtrmnet_set_eth_hdr_params(rmnetctl_hndl_t *hndl,
 			unsigned char *src_mac_addr,
 			unsigned char *dst_mac_addr,
 			uint16_t *error_code);
+
+int rtrmnet_associate_call_type(rmnetctl_hndl_t *hndl,
+				char *devname,
+				char *vndname,
+				uint8_t call_type,
+				uint16_t *error_code);
 
 #endif /* not defined LIBRMNETCTL_H */
 
