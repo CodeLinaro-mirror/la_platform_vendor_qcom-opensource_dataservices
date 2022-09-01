@@ -29,6 +29,10 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Changes from Qualcomm Innovation Center are provided under the following license:
+Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause-Clear
+
 ******************************************************************************/
 
 /*!
@@ -62,6 +66,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define RMNETCTL_ADD_FLOW 1
 /* Flag to delete an existing flow*/
 #define RMNETCTL_DEL_FLOW 0
+
+#define RMNETCTL_RMNET_ETH_PREFIX "rmnet_eth"
 
 enum rmnetctl_error_codes_e {
 	/* API succeeded. This should always be the first element. */

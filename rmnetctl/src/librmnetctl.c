@@ -29,6 +29,10 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+Changes from Qualcomm Innovation Center are provided under the following license:
+Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+SPDX-License-Identifier: BSD-3-Clause-Clear
+
 ******************************************************************************/
 
 /*!
@@ -134,10 +138,15 @@ enum {
 /* 0 reserved, 1-15 for data, 16-30 for acks */
 #define RMNETCTL_NUM_TX_QUEUES 31
 
+/* Just a single TX queue for ETH */
+#define RMNETCTL_NUM_ETH_TX_QUEUES 1
+
 /* This needs to be hardcoded here because some legacy linux systems
  * do not have this definition
  */
 #define RMNET_IFLA_NUM_TX_QUEUES 31
+
+/*  */
 
 /*===========================================================================
 			LOCAL FUNCTION DEFINITIONS
@@ -1175,6 +1184,7 @@ static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
 	struct rtattr *linkinfo, *datainfo;
 	struct ifla_vlan_flags flags;
 	int rc;
+	char vnd_kind[strlen(RMNETCTL_RMNET_ETH_PREFIX) + 1];
 
 	/* Set up link attr with devindex as data */
 	rc = rta_put_u32(req, reqsize, IFLA_LINK, devindex);
@@ -1190,7 +1200,14 @@ static int rmnet_fill_newlink_msg(struct nlmsg *req, size_t *reqsize,
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
-	rc = rta_put_string(req, reqsize, IFLA_INFO_KIND, "rmnet");
+	if (strncmp(vndname, RMNETCTL_RMNET_ETH_PREFIX, strlen(RMNETCTL_RMNET_ETH_PREFIX))) {
+		strlcpy(vnd_kind, "rmnet", sizeof(vnd_kind));
+	}
+	else {
+		strlcpy(vnd_kind, RMNETCTL_RMNET_ETH_PREFIX, sizeof(vnd_kind));
+	}
+
+	rc = rta_put_string(req, reqsize, IFLA_INFO_KIND, vnd_kind);
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
@@ -1394,6 +1411,7 @@ int rtrmnet_ctl_newvnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 	struct nlmsg req;
 	size_t reqsize;
 	int rc;
+	uint32_t num_tx_qs;
 
 	if (!hndl || !devname || !vndname || !error_code ||
 	   _rmnetctl_check_dev_name(vndname) || _rmnetctl_check_dev_name(devname))
@@ -1416,8 +1434,16 @@ int rtrmnet_ctl_newvnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 	}
 
 	*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
+
+	if (strncmp(vndname, RMNETCTL_RMNET_ETH_PREFIX, strlen(RMNETCTL_RMNET_ETH_PREFIX))) {
+		num_tx_qs = RMNETCTL_NUM_TX_QUEUES;
+	}
+	else {
+		num_tx_qs = RMNETCTL_NUM_ETH_TX_QUEUES;
+	}
+
 	rc = rta_put_u32(&req, &reqsize, RMNET_IFLA_NUM_TX_QUEUES,
-			 RMNETCTL_NUM_TX_QUEUES);
+			 num_tx_qs);
 	if (rc != RMNETCTL_SUCCESS)
 		return rc;
 
