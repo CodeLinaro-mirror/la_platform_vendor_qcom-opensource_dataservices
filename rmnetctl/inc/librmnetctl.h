@@ -98,6 +98,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Flag to delete an existing flow*/
 #define RMNETCTL_DEL_FLOW 0
 
+/* rmnet_netlink_message_types_e to get ID from VND */
+#define RMNET_NETLINK_GET_ID_FROM_VND 17
+
 enum rmnetctl_error_codes_e {
 	/* API succeeded. This should always be the first element. */
 	RMNETCTL_API_SUCCESS = 0,
