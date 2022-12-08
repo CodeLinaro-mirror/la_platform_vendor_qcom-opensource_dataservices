@@ -5,7 +5,7 @@ AC_INIT([data-oss], [1.0.0])
 AM_INIT_AUTOMAKE
 AC_OUTPUT(Makefile rmnetctl/src/Makefile rmnetctl/cli/Makefile data-oss.pc)
 AC_CONFIG_SRCDIR([rmnetctl/src/librmnetctl.c])
-#AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
