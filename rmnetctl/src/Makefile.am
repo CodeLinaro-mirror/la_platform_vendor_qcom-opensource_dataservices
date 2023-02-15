@@ -3,8 +3,8 @@ AM_CFLAGS += -I./../inc
 
 librmnetctl_la_C = @C@
 librmnetctl_la_SOURCES = librmnetctl.c \
-	    			../../../common/src/strlcat.c \
-	    			../../../common/src/strlcpy.c
+	    			$(BUILD_ROOT)/android_compat/device/qcom/common/src/strlcat.c \
+	    			$(BUILD_ROOT)/android_compat/device/qcom/common/src/strlcpy.c
 
 common_LDFLAGS = -lpthread -lrt 
 
