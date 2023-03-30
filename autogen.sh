@@ -1,0 +1,15 @@
+
+#!/bin/sh
+#Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+#SPDX-License-Identifier: BSD-3-Clause-Clear
+
+#
+# autogen.sh -- Autotools bootstrapping
+#
+
+libtoolize --copy --force
+aclocal &&\
+autoheader &&\
+autoconf &&\
+automake --add-missing --copy
+
