@@ -33,7 +33,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
  *  Changes from Qualcomm Innovation Center are provided under the following license:
  *
- *  Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted (subject to the limitations in the
@@ -137,7 +137,8 @@ static void rmnet_api_usage(void)
 	printf(_2TABS" <vnd>                   string - vnd device_name");
 	printf(_2TABS" <vnd id>                int - new vnd id");
 	printf(_2TABS" <flags>                 int - new flag config\n\n");
-	printf("rmnetcli -n dellink <real dev>           Delete a vnd");
+	printf("rmnetcli -n getlink <dev_name>           Get device config\n\n");
+	printf("rmnetcli -n dellink <dev_name>           Delete a vnd");
 	printf(_2TABS"                         by inputting dev name\n\n");
 	printf("rmnetcli -n bridgelink  <real dev>       Bridge a vnd and a dev");
 	printf(_2TABS" <vnd id>                by specifying dev id and vnd id\n\n");
@@ -166,7 +167,13 @@ static void rmnet_api_usage(void)
 	printf(_2TABS" <flags>                 int - flags\n\n");
 	printf("rmnetcli -n systemdown    <real dev> <vnd name> <instance>\n\n ");
 	printf("rmnetcli -n setethhdr     <real dev> <vnd name> <src mac> <dst mac>\n\n");
-
+	printf("rmnetcli -n routemode          <real dev>\n");
+	printf(_2TABS" <vnd_name>              string - vnd device name\n\n");
+	printf(_2TABS" <mode>                  int - [0 default / 1 ip route]\n\n");
+	printf("rmnetcli -n iprouteparams      <real dev>\n");
+	printf(_2TABS" <vnd_name>              string - vnd device name\n\n");
+	printf(_2TABS" <txq>                   int - tx queue for ip route mode\n\n");
+	printf(_2TABS" <rxq>                   int - rx queue for ip route mode\n\n");
 }
 
 static void print_rmnetctl_lib_errors(uint16_t error_number)
@@ -278,6 +285,28 @@ static int rmnet_api_call(int argc, char *argv[])
 							    &error_number,
 							    _STRTOI32(argv[3]),
 							    _STRTOI32(argv[4]));
+		} else if (!strcmp(*argv, "getlink")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			uint32_t flags = 0;
+			uint16_t mux_id = 0;
+			uint8_t mode = 0;
+			uint16_t tx_queue = 0;
+			uint16_t rx_queue = 0;
+
+			return_code = rtrmnet_ctl_getvnd(handle, argv[1],
+							 &error_number,
+							 &mux_id, &flags,
+							 &mode, &tx_queue,
+							 &rx_queue);
+			if (return_code == RMNETCTL_API_SUCCESS) {
+				printf("Configuration for device %s:\n", argv[1]);
+				printf("\tMux id: %d\n", mux_id);
+				printf("\tData format: 0x%04x\n", flags);
+				printf("\tMode: %u\n", mode);
+				printf("\tIP route params\n");
+				printf("\t\ttx_queue: %u\n", tx_queue);
+				printf("\t\trx_queue: %u\n", rx_queue);
+			}
 		} else if (!strcmp(*argv, "dellink")) {
 			_RMNETCLI_CHECKNULL(argv[1]);
 				return_code = rtrmnet_ctl_delvnd(handle, argv[1],
@@ -364,8 +393,25 @@ static int rmnet_api_call(int argc, char *argv[])
 								(unsigned char *) argv[3],
 								(unsigned char *) argv[4],
 								&error_number);
-		}
+		} else if (!strcmp(*argv, "routemode")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
 
+			return_code = rtrmnet_update_route_mode(handle, argv[1], argv[2],
+								_STRTOUI8(argv[3]),
+								&error_number);
+		} else if (!strcmp(*argv, "iprouteparams")) {
+			_RMNETCLI_CHECKNULL(argv[1]);
+			_RMNETCLI_CHECKNULL(argv[2]);
+			_RMNETCLI_CHECKNULL(argv[3]);
+			_RMNETCLI_CHECKNULL(argv[4]);
+
+			return_code = rtrmnet_update_ip_route_params(handle, argv[1], argv[2],
+								     _STRTOUI16(argv[3]),
+								     _STRTOUI16(argv[4]),
+								     &error_number);
+		}
 
 		goto end;
 	}
