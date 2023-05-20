@@ -138,8 +138,21 @@ struct nlmsg {
 #define RMNET_IFLA_NUM_TX_QUEUES 31
 
 #define RMNET_IFLA_ETH 5
-#define RMNET_IFLA_IPROUTE_CONFIG 6
 #define MAX_MAC_ADDR_LEN 32
+
+/* IFLA Attributes for the RT RmNet driver */
+enum {
+	RMNETCTL_IFLA_UNSPEC,
+	RMNETCTL_IFLA_MUX_ID,
+	RMNETCTL_IFLA_FLAGS,
+	RMNETCTL_IFLA_DFC_QOS,
+	RMNETCTL_IFLA_UPLINK_PARAMS,
+	RMNETCTL_IFLA_UPLINK_STATE_ID,
+	RMNETCTL_IFLA_IP_ROUTE_CONFIG,
+	RMNETCTL_IFLA_ROUTE_MODE,
+	RMNETCTL_IFLA_IP_ROUTE_PARAMS,
+	__RMNETCTL_IFLA_MAX,
+};
 
 struct rmnet_ip_route_config {
   char          dev_name[IFNAMSIZ];
@@ -150,6 +163,11 @@ struct rmnet_eth_hdr_info
 {
   unsigned char src_mac_addr[MAX_MAC_ADDR_LEN];
   unsigned char dst_mac_addr[MAX_MAC_ADDR_LEN];
+};
+
+struct rmnet_ip_route_params {
+	uint16_t tx_queue;
+	uint16_t rx_queue;
 };
 
 /*===========================================================================
@@ -216,6 +234,31 @@ static inline int _rmnetctl_check_dev_name(const char *dev_name) {
 	return_code = RMNETCTL_SUCCESS;
 	} while(0);
 	return return_code;
+}
+
+static void rta_parse(struct rtattr **tb, int maxtype, struct rtattr *head,
+		      int len)
+{
+	struct rtattr *rta;
+
+	memset(tb, 0, sizeof(struct rtattr *) * maxtype);
+	for (rta = head; RTA_OK(rta, len);
+	     rta = RTA_NEXT(rta, len)) {
+		__u16 type = rta->rta_type & NLA_TYPE_MASK;
+
+		if (type > 0 && type <= maxtype)
+			tb[type] = rta;
+	}
+}
+
+static struct rtattr *rta_find(struct rtattr *rta, int attrlen, uint16_t type)
+{
+	for (; RTA_OK(rta, attrlen); rta = RTA_NEXT(rta, attrlen)) {
+		if (rta->rta_type == (type & NLA_TYPE_MASK))
+			return rta;
+	}
+
+	return NULL;
 }
 
 /*===========================================================================
@@ -608,6 +651,108 @@ int rtrmnet_ctl_changevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
 	}
 
 	return rmnet_get_ack(hndl, error_code);
+}
+
+int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
+		       uint16_t *error_code, uint16_t *mux_id,
+		       uint32_t *flagconfig, uint8_t *mode,
+		       uint16_t *tx_queue, uint16_t *rx_queue)
+{
+	struct nlmsg req;
+	struct nlmsghdr *resp;
+	struct rtattr *attrs, *linkinfo, *datainfo;
+	struct rtattr *tb[__RMNETCTL_IFLA_MAX];
+	unsigned int devindex = 0;
+	int resp_len;
+
+	memset(&req, 0, sizeof(req));
+
+	if (!hndl || !vndname || !error_code || !(mux_id || flagconfig) ||
+	    _rmnetctl_check_dev_name(vndname))
+		return RMNETCTL_INVALID_ARG;
+
+	req.nl_addr.nlmsg_type = RTM_GETLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of vndname */
+	devindex = if_nametoindex(vndname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	req.ifmsg.ifi_index = devindex;
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0) {
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	resp_len = recv(hndl->netlink_fd, NULL, 0, MSG_PEEK | MSG_TRUNC);
+	if (resp_len < 0) {
+		*error_code = errno;
+		return RMNETCTL_API_ERR_MESSAGE_RECEIVE;
+	}
+
+	resp = malloc((size_t)resp_len);
+	if (!resp) {
+		*error_code = errno;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	resp_len = recv(hndl->netlink_fd, (char *)resp, (size_t)resp_len, 0);
+	if (resp_len < 0) {
+		*error_code = errno;
+		free(resp);
+		return RMNETCTL_API_ERR_MESSAGE_RECEIVE;
+	}
+
+	/* Parse out the RT attributes */
+	attrs = (struct rtattr *)((char *)NLMSG_DATA(resp) +
+				  NLMSG_ALIGN(sizeof(req.ifmsg)));
+	linkinfo = rta_find(attrs, NLMSG_PAYLOAD(resp, sizeof(req.ifmsg)),
+			    IFLA_LINKINFO);
+	if (!linkinfo) {
+		free(resp);
+		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	datainfo = rta_find(RTA_DATA(linkinfo), RTA_PAYLOAD(linkinfo),
+			    IFLA_INFO_DATA);
+	if (!datainfo) {
+		free(resp);
+		*error_code = RMNETCTL_API_ERR_RTA_FAILURE;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	/* Parse all the rmnet-specific information from the kernel */
+	rta_parse(tb, __RMNETCTL_IFLA_MAX, RTA_DATA(datainfo),
+		  RTA_PAYLOAD(datainfo));
+	if (tb[RMNETCTL_IFLA_MUX_ID] && mux_id)
+		*mux_id = *((uint16_t *)RTA_DATA(tb[RMNETCTL_IFLA_MUX_ID]));
+	if (tb[RMNETCTL_IFLA_FLAGS] && flagconfig) {
+		struct ifla_vlan_flags *flags;
+
+		flags = (struct ifla_vlan_flags *)
+			 RTA_DATA(tb[RMNETCTL_IFLA_FLAGS]);
+		*flagconfig = flags->flags;
+	}
+	if (tb[RMNETCTL_IFLA_ROUTE_MODE] && mode)
+		*mode = *((uint8_t *)RTA_DATA(tb[RMNETCTL_IFLA_ROUTE_MODE]));
+	if (tb[RMNETCTL_IFLA_IP_ROUTE_PARAMS] && tx_queue && rx_queue) {
+		struct rmnet_ip_route_params *ip_route_params;
+
+		ip_route_params = (struct rmnet_ip_route_params *)
+			 RTA_DATA(tb[RMNETCTL_IFLA_IP_ROUTE_PARAMS]);
+		*tx_queue = ip_route_params->tx_queue;
+		*rx_queue = ip_route_params->rx_queue;
+	}
+
+	free(resp);
+	return RMNETCTL_API_SUCCESS;
 }
 
 int rtrmnet_ctl_bridgevnd(rmnetctl_hndl_t *hndl, char *devname, char *vndname,
@@ -1417,12 +1562,218 @@ int rtrmnet_associate_call_type(rmnetctl_hndl_t *hndl,
 					NLMSG_ALIGN(req.nl_addr.nlmsg_len));
 
 	/* Copy call information */
-	attrinfo->rta_type = RMNET_IFLA_IPROUTE_CONFIG;
+	attrinfo->rta_type = RMNETCTL_IFLA_IP_ROUTE_CONFIG;
 	attrinfo->rta_len = RTA_LENGTH(sizeof(iproute_cfg));
 	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize,
 			&iproute_cfg, sizeof(iproute_cfg)));
 	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
 					RTA_ALIGN(RTA_LENGTH(sizeof(iproute_cfg)));
+
+	datainfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)datainfo;
+	linkinfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)linkinfo;
+
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0)
+	{
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	return rmnet_get_ack(hndl, error_code);
+}
+
+int rtrmnet_update_route_mode(rmnetctl_hndl_t *hndl,
+			      char *devname,
+			      char *vndname,
+			      uint8_t mode,
+			      uint16_t *error_code)
+{
+	struct nlmsg req;
+	struct rtattr *attrinfo, *datainfo, *linkinfo;
+	char *kind = "rmnet";
+	unsigned int devindex = 0, val = 0;
+	size_t reqsize = 0;
+
+	if (!hndl || !devname || !vndname || !error_code ||
+	    _rmnetctl_check_dev_name(vndname) || _rmnetctl_check_dev_name(devname))
+		return RMNETCTL_INVALID_ARG;
+
+	memset(&req, 0, sizeof(req));
+
+	reqsize = NLMSG_DATA_SIZE - sizeof(*attrinfo);
+	req.nl_addr.nlmsg_type = RTM_NEWLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of devname*/
+	devindex = if_nametoindex(devname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	/* Setup link attr with devindex as data */
+	val = devindex;
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+					 attrinfo->rta_type = IFLA_LINK;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, &val, sizeof(val)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+
+	/* Set up IFLA info kind  RMNET that has linkinfo and type */
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	attrinfo->rta_type =  IFLA_IFNAME;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, vndname, strlen(vndname) + 1));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+
+	linkinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	linkinfo->rta_type = IFLA_LINKINFO;
+	linkinfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	attrinfo->rta_type =  IFLA_INFO_KIND;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, kind, strlen(kind)));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+
+	datainfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	datainfo->rta_type =  IFLA_INFO_DATA;
+	datainfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+					NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	/* Copy call information */
+	attrinfo->rta_type = RMNETCTL_IFLA_ROUTE_MODE;
+	attrinfo->rta_len = RTA_LENGTH(sizeof(mode));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, &mode, sizeof(mode)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(sizeof(mode)));
+
+	datainfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)datainfo;
+	linkinfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)linkinfo;
+
+	if (send(hndl->netlink_fd, &req, req.nl_addr.nlmsg_len, 0) < 0)
+	{
+		*error_code = RMNETCTL_API_ERR_MESSAGE_SEND;
+		return RMNETCTL_LIB_ERR;
+	}
+
+	return rmnet_get_ack(hndl, error_code);
+}
+
+int rtrmnet_update_ip_route_params(rmnetctl_hndl_t *hndl,
+				   char *devname,
+				   char *vndname,
+				   uint16_t tx_queue,
+				   uint16_t rx_queue,
+				   uint16_t *error_code)
+{
+	struct nlmsg req;
+	struct rtattr *attrinfo, *datainfo, *linkinfo;
+	char *kind = "rmnet";
+	unsigned int devindex = 0, val = 0;
+	size_t reqsize = 0;
+	struct rmnet_ip_route_params ip_route_params;
+
+	if (!hndl || !devname || !vndname || !error_code ||
+	    _rmnetctl_check_dev_name(vndname) || _rmnetctl_check_dev_name(devname))
+		return RMNETCTL_INVALID_ARG;
+
+	memset(&req, 0, sizeof(req));
+	memset(&ip_route_params, 0, sizeof(ip_route_params));
+
+	reqsize = NLMSG_DATA_SIZE - sizeof(*attrinfo);
+	req.nl_addr.nlmsg_type = RTM_NEWLINK;
+	req.nl_addr.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
+	req.nl_addr.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+	req.nl_addr.nlmsg_seq = hndl->transaction_id;
+	hndl->transaction_id++;
+
+	/* Get index of devname*/
+	devindex = if_nametoindex(devname);
+	if (devindex == 0) {
+		*error_code = errno;
+		return RMNETCTL_KERNEL_ERR;
+	}
+
+	/* Setup link attr with devindex as data */
+	val = devindex;
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+					 attrinfo->rta_type = IFLA_LINK;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, &val, sizeof(val)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(sizeof(val)));
+
+	/* Set up IFLA info kind  RMNET that has linkinfo and type */
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	attrinfo->rta_type =  IFLA_IFNAME;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, vndname, strlen(vndname) + 1));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(vndname) + 1));
+
+	linkinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	linkinfo->rta_type = IFLA_LINKINFO;
+	linkinfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	attrinfo->rta_type =  IFLA_INFO_KIND;
+	attrinfo->rta_len = RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, kind, strlen(kind)));
+
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(strlen(kind)));
+
+	datainfo = (struct rtattr *)(((char *)&req) +
+				     NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+	datainfo->rta_type =  IFLA_INFO_DATA;
+	datainfo->rta_len = RTA_ALIGN(RTA_LENGTH(0));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(0));
+
+	attrinfo = (struct rtattr *)(((char *)&req) +
+					NLMSG_ALIGN(req.nl_addr.nlmsg_len));
+
+	ip_route_params.tx_queue = tx_queue;
+	ip_route_params.rx_queue = rx_queue;
+
+	attrinfo->rta_type = RMNETCTL_IFLA_IP_ROUTE_PARAMS;
+	attrinfo->rta_len = RTA_LENGTH(sizeof(ip_route_params));
+	CHECK_MEMSCPY(memscpy_repeat(RTA_DATA(attrinfo), &reqsize, &ip_route_params,
+		      sizeof(ip_route_params)));
+	req.nl_addr.nlmsg_len = NLMSG_ALIGN(req.nl_addr.nlmsg_len) +
+				RTA_ALIGN(RTA_LENGTH(sizeof(ip_route_params)));
 
 	datainfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)datainfo;
 	linkinfo->rta_len = (char *)NLMSG_TAIL(&req.nl_addr) - (char *)linkinfo;
