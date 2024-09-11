@@ -1,0 +1,72 @@
+soong_config_module_type {
+    name: "automs_cc_defaults",
+    module_type: "cc_defaults",
+    config_namespace: "automsdatanamespace",
+    bool_variables: [
+        "targetauto",
+    ],
+    properties: [
+        "cppflags",
+        "srcs",
+        "shared_libs",
+    ],
+}
+
+automs_cc_defaults {
+    name: "automs_defaults",
+    soong_config_variables: {
+        targetauto: {
+            srcs: [
+                "./fidl/gen/src/v0/com/qualcomm/qti/modem/*.cpp",
+                "./src/*.cpp",
+            ],
+            cppflags: [
+                "-fexceptions",
+                "-fpermissive",
+                "-Wno-attributes",
+                "-Wno-unused-variable",
+                "-Wno-unused-parameter",
+                "-Wno-overloaded-virtual"
+            ],
+            shared_libs: [
+                "libvsomeip",
+                "libvsomeip_cfg",
+                "libvsomeip_e2e",
+                "libvsomeip_sd",
+                "libCommonAPI-SomeIP",
+                "libCommonAPI",
+                "liblog",
+                "libdl",
+            ],
+        }
+    }
+}
+
+prebuilt_etc {
+    name: "vsomeip-automs_client.json",
+    vendor: true,
+    src: "./vsomeip-automs_client.json",
+}
+
+cc_library_shared {
+    name: "libTelephonyInterface-someip",
+    vendor: true,
+    defaults: [
+        "automs_defaults",
+        "libTelephonyInterface-someip_default"
+    ],
+    local_include_dirs: [
+       "./fidl/gen/src"
+    ],
+    export_include_dirs: [
+       "./fidl/gen/inc",
+       "./fidl/gen/src",
+       "./inc"
+    ],
+}
+
+cc_defaults {
+    name: "libTelephonyInterface-someip_default",
+    vendor: true,
+    rtti: true,
+}
