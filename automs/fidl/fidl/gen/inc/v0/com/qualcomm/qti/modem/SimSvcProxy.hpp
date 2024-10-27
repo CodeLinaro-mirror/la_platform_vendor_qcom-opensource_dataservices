@@ -72,8 +72,6 @@ public:
     virtual std::future<void> getCompletionFuture();
 
     /**
-     * description: 
-     * Retrieves the IMSI for the SIM
      * Calls GetImsi with synchronous semantics.
      *
      * All const parameters are input parameters to this method.
@@ -118,8 +116,6 @@ public:
      */
     virtual std::future<CommonAPI::CallStatus> GetStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
     /**
-     * description: 
-     * Retrieves the SIM's ICCID
      * Calls GetICCID with synchronous semantics.
      *
      * All const parameters are input parameters to this method.
@@ -140,10 +136,6 @@ public:
      * It will provide the same value for CallStatus as will be handed to the callback.
      */
     virtual std::future<CommonAPI::CallStatus> GetICCIDAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetICCIDAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
-    /*
-     * description: 
-     * SIM card state change event
-     */
     /**
      * Returns the wrapper class that provides access to the broadcast SimState.
      */
@@ -173,10 +165,6 @@ template <typename ... _AttributeExtensions>
 SimSvcProxy<_AttributeExtensions...>::~SimSvcProxy() {
 }
 
-/*
- * description: 
- * Retrieves the IMSI for the SIM
- */
 template <typename ... _AttributeExtensions>
 void SimSvcProxy<_AttributeExtensions...>::GetImsi(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imsi, const CommonAPI::CallInfo *_info) {
     if (!_phoneId.validate()) {
@@ -223,10 +211,6 @@ std::future<CommonAPI::CallStatus> SimSvcProxy<_AttributeExtensions...>::GetStat
     }
     return delegate_->GetStateAsync(_phoneId, _callback, _info);
 }
-/*
- * description: 
- * Retrieves the SIM's ICCID
- */
 template <typename ... _AttributeExtensions>
 void SimSvcProxy<_AttributeExtensions...>::GetICCID(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_iccid, const CommonAPI::CallInfo *_info) {
     if (!_phoneId.validate()) {

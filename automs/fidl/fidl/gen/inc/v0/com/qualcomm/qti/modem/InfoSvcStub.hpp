@@ -104,10 +104,6 @@ public:
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
-    /*
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
-     */
     /// This is the method that will be called on remote calls on the method GetImei.
     virtual void GetImei(const std::shared_ptr<CommonAPI::ClientId> _client, GetImeiReply_t _reply) = 0;
 
