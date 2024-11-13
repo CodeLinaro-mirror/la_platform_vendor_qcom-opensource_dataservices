@@ -44,8 +44,8 @@ public:
     static inline const char* getInterface();
     static inline CommonAPI::Version getInterfaceVersion();
     
-    struct DataState : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct DataState : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             DATA_DISCONNECTED = 0,
             DATA_CONNECTED = 1,
             DATA_CONNECTION_FAILED = 2,
@@ -53,16 +53,16 @@ public:
         };
     
         DataState()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::DATA_DISCONNECTED)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::DATA_DISCONNECTED)) {}
         DataState(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::DATA_DISCONNECTED):
-                case static_cast< uint8_t>(Literal::DATA_CONNECTED):
-                case static_cast< uint8_t>(Literal::DATA_CONNECTION_FAILED):
-                case static_cast< uint8_t>(Literal::DATA_CONNECTION_STALLED):
+                case static_cast< uint32_t>(Literal::DATA_DISCONNECTED):
+                case static_cast< uint32_t>(Literal::DATA_CONNECTED):
+                case static_cast< uint32_t>(Literal::DATA_CONNECTION_FAILED):
+                case static_cast< uint32_t>(Literal::DATA_CONNECTION_STALLED):
                 return true;
             default:
                 return false;
@@ -76,21 +76,21 @@ public:
         inline bool operator<(const DataState &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const DataState &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::DATA_DISCONNECTED): return "DATA_DISCONNECTED";
-            case static_cast< uint8_t>(Literal::DATA_CONNECTED): return "DATA_CONNECTED";
-            case static_cast< uint8_t>(Literal::DATA_CONNECTION_FAILED): return "DATA_CONNECTION_FAILED";
-            case static_cast< uint8_t>(Literal::DATA_CONNECTION_STALLED): return "DATA_CONNECTION_STALLED";
+            case static_cast< uint32_t>(Literal::DATA_DISCONNECTED): return "DATA_DISCONNECTED";
+            case static_cast< uint32_t>(Literal::DATA_CONNECTED): return "DATA_CONNECTED";
+            case static_cast< uint32_t>(Literal::DATA_CONNECTION_FAILED): return "DATA_CONNECTION_FAILED";
+            case static_cast< uint32_t>(Literal::DATA_CONNECTION_STALLED): return "DATA_CONNECTION_STALLED";
             default: return "UNDEFINED";
             }
         }
