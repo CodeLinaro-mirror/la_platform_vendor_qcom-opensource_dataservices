@@ -1,0 +1,151 @@
+/*
+* Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+* SPDX-License-Identifier: BSD-3-Clause-Clear
+*/
+
+package com.qualcomm.qti.modem
+import com.qualcomm.qti.modem.CommonTypes.* from "../common/CommonTypes.fidl"
+
+interface MngdConnSvc
+{
+    version { major 0 minor 1 }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Maximum number of data in the system.
+    */
+    //----------------------------------------------------------------------------------------------
+    const UInt8 MAX_DATA_NUM = 4
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * The data state.
+    */
+    //----------------------------------------------------------------------------------------------
+    enumeration DataState
+    {
+        DATA_DISCONNECTED       ///< Transition state to CONNECTED or FAILED.
+        DATA_CONNECTED          ///< Data connected state.
+        DATA_CONNECTION_FAILED  ///< The service is not able to reconnect data even after retries.
+        DATA_CONNECTION_STALLED ///< Transition state to CONNECTED or DISCONNECTED.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * The data Ip info structure.
+    */
+    //----------------------------------------------------------------------------------------------
+    struct DataIpInfo
+    {
+        String ipAddr      ///< The Ip address.
+        String gatewayAddr ///< The Ip gateway address.
+        String dns1Addr    ///< The Ip primary DNS address.
+        String dns2Addr    ///< The Ip secondary DNS address.
+        UInt32 ipMask      ///< The Ip mask.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Starts a data session for the given data name. This API should be used when the value of
+    * "AutoStart" is "No" in the configuration file.
+    *
+    * The service tracks clients that call StartData for Data objects with AutoStart:No and is used
+    * to manage StopData behavior.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - DUPLICATE -- The data connection is already started.
+    *   - IN_PROGRESS -- The data connection establishment retry is in progress.
+    *   - Appropriate error is returned on failure.
+    */
+    //----------------------------------------------------------------------------------------------
+    method StartData
+    {
+        in
+        {
+            String name         ///< The data name to use.
+        }
+        error Result            ///< return result.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Stops a data cellular session for the given data name.
+    *
+    * Data will be stopped only when all clients that have called StartData for data objects with
+    * AutoStart:No either stop data or exit.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - NOT_PERMITTED -- If data is auto started by the service, application cannot stop data.
+    *   - NOT_POSSIBLE  -- If data start connection test is enabled and it is in progress,
+    *                      NOT_POSSIBLE is returned. Applications can retry StopData after an
+    *                      appropriate delay. Data start connection test is either curl or 5 ping.
+    *   - Appropriate error is returned on failure.
+    */
+    //----------------------------------------------------------------------------------------------
+    method StopData
+    {
+        in
+        {
+            String name         ///< The data name to use.
+        }
+        error Result            ///< return result.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Gets connection state information for all currently running datas.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    */
+    //----------------------------------------------------------------------------------------------
+    method GetDataList
+    {
+        out
+        {
+            UInt8 dataNum                       ///< The number of data that has already started.
+            String[] name                       ///< The data name to use.
+            DataState[] dataState               ///< The data state.
+        }
+        error Result                            ///< return result.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Gets the data Ipv4 address, gateway, DNS, and mask.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - NOT_FOUND -- Failed.
+    */
+    //----------------------------------------------------------------------------------------------
+    method GetDataIpv4Info
+    {
+        in
+        {
+            String name         ///< The data name to use.
+        }
+        out
+        {
+            String ifName       ///< The interface name.
+            DataIpInfo ipv4Info ///< The data Ipv4 info
+        }
+        error Result            ///< return result.
+    }
+
+    //----------------------------------------------------------------------------------------------
+    /**
+    * Events to report data state.
+    */
+    //----------------------------------------------------------------------------------------------
+    broadcast DataState
+    {
+        out
+        {
+            String name             ///< The data name to use.
+            DataState dataState     ///< The data state.
+        }
+    }
+}

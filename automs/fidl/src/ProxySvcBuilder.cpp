@@ -42,3 +42,12 @@ std::shared_ptr<InfoSvcProxy<>> ProxySvcBuilder::getInfoSvcProxy() {
     }
     return infoProxy;
 }
+
+std::shared_ptr<MngdConnSvcProxy<>> ProxySvcBuilder::getMngdConnProxy() {
+    auto mngdProxy = CommonAPI::Runtime::get()->buildProxy<MngdConnSvcProxy>(
+            "local", "modem.MngdConnSvc", "MngdConnSvcTest");
+    while (!mngdProxy->isAvailable()) {
+        std::this_thread::sleep_for(std::chrono::microseconds(10));
+    }
+    return mngdProxy;
+}
