@@ -72,17 +72,10 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const RadioSvc::Rat&, const uint32_t&, const std::string&, const std::string&, const RadioSvc::NetRegState&)> GetNetRegStateAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const RadioSvc::NRDcnrRestriction&)> GetNrDualConnectivityStatusAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&)> SetSignalStrengthReportingCriteriaAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const RadioSvc::NetRegState&)> GetPacketSwitchedStateAsyncCallback;
 
-    /*
-     * description: 
-     * Set power state of the Radio
-     */
     virtual void SetRadioPower(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType _power, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> SetRadioPowerAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType &_power, SetRadioPowerAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Get power state of the Radio
-     */
     virtual void GetRadioPower(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType &_power, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetRadioPowerAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetRadioPowerAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     /*
@@ -91,73 +84,27 @@ public:
      */
     virtual void GetSignalStrength(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::Rat _rat, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::SignalMetrics &_signalStrength, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetSignalStrengthAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const RadioSvc::Rat &_rat, GetSignalStrengthAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Get the network registration mode
-     */
     virtual void GetRegisterMode(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, bool &_isManual, std::string &_mcc, std::string &_mnc, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetRegisterModeAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetRegisterModeAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Registers to network using automatic mode
-     */
     virtual void SetAutomaticRegisterMode(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> SetAutomaticRegisterModeAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, SetAutomaticRegisterModeAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets SIM maximum counts and RAT capabilities
-     */
     virtual void GetHardwareConfig(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, uint8_t &_totalSimCount, uint8_t &_maxActiveSims, RadioSvc::RatBitMask &_deviceRatCapMask, RadioSvc::RatBitMask &_simRatCapMask, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetHardwareConfigAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetHardwareConfigAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets the RAT preferences
-     */
     virtual void GetRatPreferences(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::RatBitMask &_ratMask, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetRatPreferencesAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetRatPreferencesAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets the long name and short name of the network
-     */
     virtual void GetCurrentNetworkName(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_longName, std::string &_shortName, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetCurrentNetworkNameAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetCurrentNetworkNameAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets the current registration state
-     */
     virtual void GetNetRegState(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::Rat &_rat, uint32_t &_cellId, std::string &_mcc, std::string &_mnc, RadioSvc::NetRegState &_netReg, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetNetRegStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetNetRegStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets the DCNR and ENDC mode status
-     */
     virtual void GetNrDualConnectivityStatus(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::NRDcnrRestriction &_statusDcnr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetNrDualConnectivityStatusAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetNrDualConnectivityStatusAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Sets signal reporting criteria.
-     */
     virtual void SetSignalStrengthReportingCriteria(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::SigType _sigType, RadioSvc::SigStrengthIndication _ind, RadioSvc::SigStrengthHysteresis _hyst, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> SetSignalStrengthReportingCriteriaAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const RadioSvc::SigType &_sigType, const RadioSvc::SigStrengthIndication &_ind, const RadioSvc::SigStrengthHysteresis &_hyst, SetSignalStrengthReportingCriteriaAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Event to report signal strength change
-     */
+    virtual void GetPacketSwitchedState(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::NetRegState &_netState, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> GetPacketSwitchedStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetPacketSwitchedStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual SignalStrengthEvent& getSignalStrengthEvent() = 0;
-    /*
-     * description: 
-     * Event to report RAT change
-     */
     virtual RadioRatEvent& getRadioRatEvent() = 0;
-    /*
-     * description: 
-     * Event to radio state change
-     */
     virtual RadioStateEvent& getRadioStateEvent() = 0;
-    /*
-     * description: 
-     * Event to report cell info change
-     */
     virtual CellInfoEvent& getCellInfoEvent() = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;

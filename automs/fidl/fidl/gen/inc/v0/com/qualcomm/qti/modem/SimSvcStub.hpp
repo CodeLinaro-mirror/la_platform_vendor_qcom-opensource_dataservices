@@ -112,10 +112,6 @@ public:
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
-    /*
-     * description: 
-     * Retrieves the IMSI for the SIM
-     */
     /// This is the method that will be called on remote calls on the method GetImsi.
     virtual void GetImsi(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetImsiReply_t _reply) = 0;
     /*
@@ -124,16 +120,8 @@ public:
      */
     /// This is the method that will be called on remote calls on the method GetState.
     virtual void GetState(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetStateReply_t _reply) = 0;
-    /*
-     * description: 
-     * Retrieves the SIM's ICCID
-     */
     /// This is the method that will be called on remote calls on the method GetICCID.
     virtual void GetICCID(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetICCIDReply_t _reply) = 0;
-    /*
-     * description: 
-     * SIM card state change event
-     */
     /// Sends a broadcast event for SimState.
     virtual void fireSimStateEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::SimSvc::States &_simState) {
         auto stubAdapter = CommonAPI::Stub<SimSvcStubAdapter, SimSvcStubRemoteEvent>::stubAdapter_.lock();
