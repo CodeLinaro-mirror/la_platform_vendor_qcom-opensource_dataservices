@@ -63,30 +63,18 @@ public:
         return &remoteEventHandler_;
     }
 
-    /*
-     * description: 
-     * Starts a data session for the given data name.
-     */
     COMMONAPI_EXPORT virtual void StartData(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, StartDataReply_t _reply) {
         (void)_client;
         (void)_name;
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
         _reply(error);
     }
-    /*
-     * description: 
-     * Stops a data cellular session for the given name.
-     */
     COMMONAPI_EXPORT virtual void StopData(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, StopDataReply_t _reply) {
         (void)_client;
         (void)_name;
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
         _reply(error);
     }
-    /*
-     * description: 
-     * Gets connection state information for all currently running datas.
-     */
     COMMONAPI_EXPORT virtual void GetDataList(const std::shared_ptr<CommonAPI::ClientId> _client, GetDataListReply_t _reply) {
         (void)_client;
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
@@ -95,10 +83,14 @@ public:
         std::vector< MngdConnSvc::DataState > dataState = {};
         _reply(error, dataNum, name, dataState);
     }
-    /*
-     * description: 
-     * Events to report data state.
-     */
+    COMMONAPI_EXPORT virtual void GetDataIpv4Info(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, GetDataIpv4InfoReply_t _reply) {
+        (void)_client;
+        (void)_name;
+        ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
+        std::string ifName = "";
+        MngdConnSvc::DataIpInfo ipv4Info = {};
+        _reply(error, ifName, ipv4Info);
+    }
     COMMONAPI_EXPORT virtual void fireDataStateEvent(const std::string &_name, const ::v0::com::qualcomm::qti::modem::MngdConnSvc::DataState &_dataState) {
         if (!_dataState.validate()) {
             return;

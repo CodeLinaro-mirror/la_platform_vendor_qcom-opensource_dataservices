@@ -20,9 +20,12 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include <CommonAPI/Event.hpp>
@@ -51,29 +54,16 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&)> StartDataAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&)> StopDataAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const uint8_t&, const std::vector< std::string >&, const std::vector< MngdConnSvc::DataState >&)> GetDataListAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const std::string&, const MngdConnSvc::DataIpInfo&)> GetDataIpv4InfoAsyncCallback;
 
-    /*
-     * description: 
-     * Starts a data session for the given data name.
-     */
     virtual void StartData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> StartDataAsync(const std::string &_name, StartDataAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Stops a data cellular session for the given name.
-     */
     virtual void StopData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> StopDataAsync(const std::string &_name, StopDataAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Gets connection state information for all currently running datas.
-     */
     virtual void GetDataList(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, uint8_t &_dataNum, std::vector< std::string > &_name, std::vector< MngdConnSvc::DataState > &_dataState, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetDataListAsync(GetDataListAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Events to report data state.
-     */
+    virtual void GetDataIpv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIpInfo &_ipv4Info, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> GetDataIpv4InfoAsync(const std::string &_name, GetDataIpv4InfoAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual DataStateEvent& getDataStateEvent() = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;

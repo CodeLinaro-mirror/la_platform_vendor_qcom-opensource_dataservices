@@ -50,7 +50,7 @@ SimSvcSomeIPProxy::SimSvcSomeIPProxy(
     const CommonAPI::SomeIP::Address &_address,
     const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection)
         : CommonAPI::SomeIP::Proxy(_address, _connection),
-          simState_(*this, 0x80f2, CommonAPI::SomeIP::event_id_t(0x80f2), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, &::v0::com::qualcomm::qti::modem::SimSvc_::StatesDeployment))
+          simState_(*this, 0x9100, CommonAPI::SomeIP::event_id_t(0x9101), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, &::v0::com::qualcomm::qti::modem::SimSvc_::StatesDeployment))
 {
 }
 
@@ -63,10 +63,6 @@ SimSvcSomeIPProxy::SimStateEvent& SimSvcSomeIPProxy::getSimStateEvent() {
     return simState_;
 }
 
-/*
- * description: 
- * Retrieves the IMSI for the SIM
- */
 void SimSvcSomeIPProxy::GetImsi(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imsi, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -90,7 +86,7 @@ void SimSvcSomeIPProxy::GetImsi(::v0::com::qualcomm::qti::modem::CommonTypes::Ph
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1101),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -125,7 +121,7 @@ std::future<CommonAPI::CallStatus> SimSvcSomeIPProxy::GetImsiAsync(const ::v0::c
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1101),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -164,7 +160,7 @@ void SimSvcSomeIPProxy::GetState(::v0::com::qualcomm::qti::modem::CommonTypes::P
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1102),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -199,7 +195,7 @@ std::future<CommonAPI::CallStatus> SimSvcSomeIPProxy::GetStateAsync(const ::v0::
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1102),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -211,10 +207,6 @@ std::future<CommonAPI::CallStatus> SimSvcSomeIPProxy::GetStateAsync(const ::v0::
         std::make_tuple(deploy_error, deploy_simState));
 }
 
-/*
- * description: 
- * Retrieves the SIM's ICCID
- */
 void SimSvcSomeIPProxy::GetICCID(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_iccid, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -238,7 +230,7 @@ void SimSvcSomeIPProxy::GetICCID(::v0::com::qualcomm::qti::modem::CommonTypes::P
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1103),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -273,7 +265,7 @@ std::future<CommonAPI::CallStatus> SimSvcSomeIPProxy::GetICCIDAsync(const ::v0::
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1103),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),

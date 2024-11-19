@@ -50,10 +50,10 @@ RadioSvcSomeIPProxy::RadioSvcSomeIPProxy(
     const CommonAPI::SomeIP::Address &_address,
     const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection)
         : CommonAPI::SomeIP::Proxy(_address, _connection),
-          signalStrength_(*this, 0x80f2, CommonAPI::SomeIP::event_id_t(0x80f2), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::RatDeployment_t* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr))),
-          radioRat_(*this, 0x80fc, CommonAPI::SomeIP::event_id_t(0x80fc), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::RatDeployment_t* >(nullptr))),
-          radioState_(*this, 0x8106, CommonAPI::SomeIP::event_id_t(0x8106), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::StatesDeployment_t* >(nullptr))),
-          cellInfo_(*this, 0x8110, CommonAPI::SomeIP::event_id_t(0x8110), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::CellInfoStatusDeployment_t* >(nullptr)))
+          signalStrength_(*this, 0x9000, CommonAPI::SomeIP::event_id_t(0x9001), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::RatDeployment_t* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr))),
+          radioRat_(*this, 0x9000, CommonAPI::SomeIP::event_id_t(0x9002), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::RatDeployment_t* >(nullptr))),
+          radioState_(*this, 0x9000, CommonAPI::SomeIP::event_id_t(0x9003), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::StatesDeployment_t* >(nullptr))),
+          cellInfo_(*this, 0x9000, CommonAPI::SomeIP::event_id_t(0x9004), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment, static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::CellInfoStatusDeployment_t* >(nullptr)))
 {
 }
 
@@ -75,10 +75,6 @@ RadioSvcSomeIPProxy::CellInfoEvent& RadioSvcSomeIPProxy::getCellInfoEvent() {
     return cellInfo_;
 }
 
-/*
- * description: 
- * Set power state of the Radio
- */
 void RadioSvcSomeIPProxy::SetRadioPower(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType _power, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -102,7 +98,7 @@ void RadioSvcSomeIPProxy::SetRadioPower(::v0::com::qualcomm::qti::modem::CommonT
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1001),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -135,7 +131,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetRadioPowerAsync(const
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1001),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -147,10 +143,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetRadioPowerAsync(const
         std::make_tuple(deploy_error));
 }
 
-/*
- * description: 
- * Get power state of the Radio
- */
 void RadioSvcSomeIPProxy::GetRadioPower(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType &_power, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -174,7 +166,7 @@ void RadioSvcSomeIPProxy::GetRadioPower(::v0::com::qualcomm::qti::modem::CommonT
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1002),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -209,7 +201,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetRadioPowerAsync(const
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1002),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -253,7 +245,7 @@ void RadioSvcSomeIPProxy::GetSignalStrength(::v0::com::qualcomm::qti::modem::Com
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1003),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -293,7 +285,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetSignalStrengthAsync(c
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1003),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -305,10 +297,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetSignalStrengthAsync(c
         std::make_tuple(deploy_error, deploy_signalStrength));
 }
 
-/*
- * description: 
- * Get the network registration mode
- */
 void RadioSvcSomeIPProxy::GetRegisterMode(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, bool &_isManual, std::string &_mcc, std::string &_mnc, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -342,7 +330,7 @@ void RadioSvcSomeIPProxy::GetRegisterMode(::v0::com::qualcomm::qti::modem::Commo
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7558),
+        CommonAPI::SomeIP::method_id_t(0x1004),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -389,7 +377,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetRegisterModeAsync(con
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7558),
+        CommonAPI::SomeIP::method_id_t(0x1004),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -401,10 +389,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetRegisterModeAsync(con
         std::make_tuple(deploy_error, deploy_isManual, deploy_mcc, deploy_mnc));
 }
 
-/*
- * description: 
- * Registers to network using automatic mode
- */
 void RadioSvcSomeIPProxy::SetAutomaticRegisterMode(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -423,7 +407,7 @@ void RadioSvcSomeIPProxy::SetAutomaticRegisterMode(::v0::com::qualcomm::qti::mod
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7562),
+        CommonAPI::SomeIP::method_id_t(0x1005),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -451,7 +435,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetAutomaticRegisterMode
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7562),
+        CommonAPI::SomeIP::method_id_t(0x1005),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -463,10 +447,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetAutomaticRegisterMode
         std::make_tuple(deploy_error));
 }
 
-/*
- * description: 
- * Gets SIM maximum counts and RAT capabilities
- */
 void RadioSvcSomeIPProxy::GetHardwareConfig(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, uint8_t &_totalSimCount, uint8_t &_maxActiveSims, RadioSvc::RatBitMask &_deviceRatCapMask, RadioSvc::RatBitMask &_simRatCapMask, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -505,7 +485,7 @@ void RadioSvcSomeIPProxy::GetHardwareConfig(::v0::com::qualcomm::qti::modem::Com
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x756c),
+        CommonAPI::SomeIP::method_id_t(0x1006),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -558,7 +538,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetHardwareConfigAsync(c
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x756c),
+        CommonAPI::SomeIP::method_id_t(0x1006),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -570,10 +550,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetHardwareConfigAsync(c
         std::make_tuple(deploy_error, deploy_totalSimCount, deploy_maxActiveSims, deploy_deviceRatCapMask, deploy_simRatCapMask));
 }
 
-/*
- * description: 
- * Gets the RAT preferences
- */
 void RadioSvcSomeIPProxy::GetRatPreferences(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::RatBitMask &_ratMask, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -597,7 +573,7 @@ void RadioSvcSomeIPProxy::GetRatPreferences(::v0::com::qualcomm::qti::modem::Com
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7576),
+        CommonAPI::SomeIP::method_id_t(0x1007),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -632,7 +608,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetRatPreferencesAsync(c
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7576),
+        CommonAPI::SomeIP::method_id_t(0x1007),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -644,10 +620,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetRatPreferencesAsync(c
         std::make_tuple(deploy_error, deploy_ratMask));
 }
 
-/*
- * description: 
- * Gets the long name and short name of the network
- */
 void RadioSvcSomeIPProxy::GetCurrentNetworkName(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_longName, std::string &_shortName, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -676,7 +648,7 @@ void RadioSvcSomeIPProxy::GetCurrentNetworkName(::v0::com::qualcomm::qti::modem:
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7580),
+        CommonAPI::SomeIP::method_id_t(0x1008),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -717,7 +689,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetCurrentNetworkNameAsy
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7580),
+        CommonAPI::SomeIP::method_id_t(0x1008),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -729,10 +701,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetCurrentNetworkNameAsy
         std::make_tuple(deploy_error, deploy_longName, deploy_shortName));
 }
 
-/*
- * description: 
- * Gets the current registration state
- */
 void RadioSvcSomeIPProxy::GetNetRegState(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::Rat &_rat, uint32_t &_cellId, std::string &_mcc, std::string &_mnc, RadioSvc::NetRegState &_netReg, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -776,7 +744,7 @@ void RadioSvcSomeIPProxy::GetNetRegState(::v0::com::qualcomm::qti::modem::Common
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x758a),
+        CommonAPI::SomeIP::method_id_t(0x1009),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -835,7 +803,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetNetRegStateAsync(cons
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x758a),
+        CommonAPI::SomeIP::method_id_t(0x1009),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -847,10 +815,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetNetRegStateAsync(cons
         std::make_tuple(deploy_error, deploy_rat, deploy_cellId, deploy_mcc, deploy_mnc, deploy_netReg));
 }
 
-/*
- * description: 
- * Gets the DCNR and ENDC mode status
- */
 void RadioSvcSomeIPProxy::GetNrDualConnectivityStatus(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::NRDcnrRestriction &_statusDcnr, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -874,7 +838,7 @@ void RadioSvcSomeIPProxy::GetNrDualConnectivityStatus(::v0::com::qualcomm::qti::
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7594),
+        CommonAPI::SomeIP::method_id_t(0x100a),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -909,7 +873,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetNrDualConnectivitySta
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7594),
+        CommonAPI::SomeIP::method_id_t(0x100a),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -921,10 +885,6 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetNrDualConnectivitySta
         std::make_tuple(deploy_error, deploy_statusDcnr));
 }
 
-/*
- * description: 
- * Sets signal reporting criteria.
- */
 void RadioSvcSomeIPProxy::SetSignalStrengthReportingCriteria(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::SigType _sigType, RadioSvc::SigStrengthIndication _ind, RadioSvc::SigStrengthHysteresis _hyst, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -958,7 +918,7 @@ void RadioSvcSomeIPProxy::SetSignalStrengthReportingCriteria(::v0::com::qualcomm
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x759e),
+        CommonAPI::SomeIP::method_id_t(0x100b),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -1001,7 +961,7 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetSignalStrengthReporti
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x759e),
+        CommonAPI::SomeIP::method_id_t(0x100b),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -1011,6 +971,76 @@ std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::SetSignalStrengthReporti
                 _callback(_internalCallStatus, _deploy_error.getValue());
         },
         std::make_tuple(deploy_error));
+}
+
+void RadioSvcSomeIPProxy::GetPacketSwitchedState(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, RadioSvc::NetRegState &_netState, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
+    CommonAPI::Deployable< RadioSvc::NetRegState, ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t> deploy_netState(static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::Result,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t
+            >,
+            CommonAPI::Deployable<
+                RadioSvc::NetRegState,
+                ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t
+            >
+        >
+    >::callMethodWithReply(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x100c),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_phoneId,
+        _internalCallStatus,
+        deploy_error,
+        deploy_netState);
+    _error = deploy_error.getValue();
+    _netState = deploy_netState.getValue();
+}
+
+std::future<CommonAPI::CallStatus> RadioSvcSomeIPProxy::GetPacketSwitchedStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetPacketSwitchedStateAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deploy_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
+    CommonAPI::Deployable< RadioSvc::NetRegState, ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t> deploy_netState(static_cast< ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t* >(nullptr));
+    return CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::Result,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t
+            >,
+            CommonAPI::Deployable<
+                RadioSvc::NetRegState,
+                ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t
+            >
+        >
+    >::callMethodAsync(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x100c),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_phoneId,
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t > _deploy_error, CommonAPI::Deployable< RadioSvc::NetRegState, ::v0::com::qualcomm::qti::modem::RadioSvc_::NetRegStateDeployment_t > _netState) {
+            if (_callback)
+                _callback(_internalCallStatus, _deploy_error.getValue(), _netState.getValue());
+        },
+        std::make_tuple(deploy_error, deploy_netState));
 }
 
 void RadioSvcSomeIPProxy::getOwnVersion(uint16_t& ownVersionMajor, uint16_t& ownVersionMinor) const {
