@@ -52,10 +52,6 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const SimSvc::States&)> GetStateAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const std::string&)> GetICCIDAsyncCallback;
 
-    /*
-     * description: 
-     * Retrieves the IMSI for the SIM
-     */
     virtual void GetImsi(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imsi, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetImsiAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetImsiAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     /*
@@ -64,16 +60,8 @@ public:
      */
     virtual void GetState(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, SimSvc::States &_simState, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * Retrieves the SIM's ICCID
-     */
     virtual void GetICCID(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_iccid, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetICCIDAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetICCIDAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
-    /*
-     * description: 
-     * SIM card state change event
-     */
     virtual SimStateEvent& getSimStateEvent() = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;

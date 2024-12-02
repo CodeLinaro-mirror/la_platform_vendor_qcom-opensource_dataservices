@@ -24,9 +24,12 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <cstdint>
+#include <string>
 #include <unordered_set>
 #include <vector>
 
@@ -104,36 +107,23 @@ public:
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error)> StartDataReply_t;
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error)> StopDataReply_t;
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error, uint8_t _dataNum, std::vector< std::string > _name, std::vector< MngdConnSvc::DataState > _dataState)> GetDataListReply_t;
+    typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error, std::string _ifName, MngdConnSvc::DataIpInfo _ipv4Info)> GetDataIpv4InfoReply_t;
 
     virtual ~MngdConnSvcStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 5);
+        return (_id < 6);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
-    /*
-     * description: 
-     * Starts a data session for the given data name.
-     */
     /// This is the method that will be called on remote calls on the method StartData.
     virtual void StartData(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, StartDataReply_t _reply) = 0;
-    /*
-     * description: 
-     * Stops a data cellular session for the given name.
-     */
     /// This is the method that will be called on remote calls on the method StopData.
     virtual void StopData(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, StopDataReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets connection state information for all currently running datas.
-     */
     /// This is the method that will be called on remote calls on the method GetDataList.
     virtual void GetDataList(const std::shared_ptr<CommonAPI::ClientId> _client, GetDataListReply_t _reply) = 0;
-    /*
-     * description: 
-     * Events to report data state.
-     */
+    /// This is the method that will be called on remote calls on the method GetDataIpv4Info.
+    virtual void GetDataIpv4Info(const std::shared_ptr<CommonAPI::ClientId> _client, std::string _name, GetDataIpv4InfoReply_t _reply) = 0;
     /// Sends a broadcast event for DataState.
     virtual void fireDataStateEvent(const std::string &_name, const ::v0::com::qualcomm::qti::modem::MngdConnSvc::DataState &_dataState) {
         auto stubAdapter = CommonAPI::Stub<MngdConnSvcStubAdapter, MngdConnSvcStubRemoteEvent>::stubAdapter_.lock();

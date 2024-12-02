@@ -8,8 +8,8 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef V0_COM_QUALCOMM_QTI_MODEM_Mngd_Conn_Svc_SOMEIP_DEPLOYMENT_HPP_
-#define V0_COM_QUALCOMM_QTI_MODEM_Mngd_Conn_Svc_SOMEIP_DEPLOYMENT_HPP_
+#ifndef V0_COM_QUALCOMM_QTI_MODEM_Info_Svc_SOMEIP_DEPLOYMENT_HPP_
+#define V0_COM_QUALCOMM_QTI_MODEM_Info_Svc_SOMEIP_DEPLOYMENT_HPP_
 
 #include <v0/com/qualcomm/qti/modem/CommonTypesSomeIPDeployment.hpp>
 
@@ -28,17 +28,9 @@ namespace com {
 namespace qualcomm {
 namespace qti {
 namespace modem {
-namespace MngdConnSvc_ {
+namespace InfoSvc_ {
 
 // Interface-specific deployment types
-typedef CommonAPI::SomeIP::EnumerationDeployment<uint32_t> DataStateDeployment_t;
-typedef CommonAPI::SomeIP::StructDeployment<
-    CommonAPI::SomeIP::StringDeployment,
-    CommonAPI::SomeIP::StringDeployment,
-    CommonAPI::SomeIP::StringDeployment,
-    CommonAPI::SomeIP::StringDeployment,
-    CommonAPI::SomeIP::IntegerDeployment<uint32_t>
-> DataIpInfoDeployment_t;
 
 // Type-specific deployments
 
@@ -48,11 +40,11 @@ typedef CommonAPI::SomeIP::StructDeployment<
 
 // Broadcast-specific deployments
 
-} // namespace MngdConnSvc_
+} // namespace InfoSvc_
 } // namespace modem
 } // namespace qti
 } // namespace qualcomm
 } // namespace com
 } // namespace v0
 
-#endif // V0_COM_QUALCOMM_QTI_MODEM_Mngd_Conn_Svc_SOMEIP_DEPLOYMENT_HPP_
+#endif // V0_COM_QUALCOMM_QTI_MODEM_Info_Svc_SOMEIP_DEPLOYMENT_HPP_

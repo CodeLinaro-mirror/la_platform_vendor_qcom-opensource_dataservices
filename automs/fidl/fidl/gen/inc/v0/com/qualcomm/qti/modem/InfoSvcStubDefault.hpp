@@ -63,10 +63,6 @@ public:
         return &remoteEventHandler_;
     }
 
-    /*
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
-     */
     COMMONAPI_EXPORT virtual void GetImei(const std::shared_ptr<CommonAPI::ClientId> _client, GetImeiReply_t _reply) {
         (void)_client;
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;

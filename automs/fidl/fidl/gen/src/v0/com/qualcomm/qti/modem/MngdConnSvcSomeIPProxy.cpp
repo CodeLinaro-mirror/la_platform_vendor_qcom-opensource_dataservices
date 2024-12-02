@@ -50,7 +50,7 @@ MngdConnSvcSomeIPProxy::MngdConnSvcSomeIPProxy(
     const CommonAPI::SomeIP::Address &_address,
     const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection)
         : CommonAPI::SomeIP::Proxy(_address, _connection),
-          dataState_(*this, 0x80f2, CommonAPI::SomeIP::event_id_t(0x80f2), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataStateDeployment_t* >(nullptr)))
+          dataState_(*this, 0x9300, CommonAPI::SomeIP::event_id_t(0x9301), CommonAPI::SomeIP::event_type_e::ET_EVENT , CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE, false, std::make_tuple(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataStateDeployment_t* >(nullptr)))
 {
 }
 
@@ -63,10 +63,6 @@ MngdConnSvcSomeIPProxy::DataStateEvent& MngdConnSvcSomeIPProxy::getDataStateEven
     return dataState_;
 }
 
-/*
- * description: 
- * Starts a data session for the given data name.
- */
 void MngdConnSvcSomeIPProxy::StartData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_name(_name, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
@@ -85,7 +81,7 @@ void MngdConnSvcSomeIPProxy::StartData(std::string _name, CommonAPI::CallStatus 
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1301),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -113,7 +109,7 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::StartDataAsync(const 
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1301),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -125,10 +121,6 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::StartDataAsync(const 
         std::make_tuple(deploy_error));
 }
 
-/*
- * description: 
- * Stops a data cellular session for the given name.
- */
 void MngdConnSvcSomeIPProxy::StopData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_name(_name, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
@@ -147,7 +139,7 @@ void MngdConnSvcSomeIPProxy::StopData(std::string _name, CommonAPI::CallStatus &
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1302),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -175,7 +167,7 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::StopDataAsync(const s
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x7544),
+        CommonAPI::SomeIP::method_id_t(0x1302),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -187,10 +179,6 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::StopDataAsync(const s
         std::make_tuple(deploy_error));
 }
 
-/*
- * description: 
- * Gets connection state information for all currently running datas.
- */
 void MngdConnSvcSomeIPProxy::GetDataList(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, uint8_t &_dataNum, std::vector< std::string > &_name, std::vector< MngdConnSvc::DataState > &_dataState, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< uint8_t, CommonAPI::SomeIP::IntegerDeployment<uint8_t>> deploy_dataNum(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr));
@@ -219,7 +207,7 @@ void MngdConnSvcSomeIPProxy::GetDataList(CommonAPI::CallStatus &_internalCallSta
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1303),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -260,7 +248,7 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::GetDataListAsync(GetD
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x754e),
+        CommonAPI::SomeIP::method_id_t(0x1303),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -269,6 +257,87 @@ std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::GetDataListAsync(GetD
                 _callback(_internalCallStatus, _deploy_error.getValue(), _dataNum.getValue(), _name.getValue(), _dataState.getValue());
         },
         std::make_tuple(deploy_error, deploy_dataNum, deploy_name, deploy_dataState));
+}
+
+void MngdConnSvcSomeIPProxy::GetDataIpv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIpInfo &_ipv4Info, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
+    CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_name(_name, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
+    CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_ifName(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
+    CommonAPI::Deployable< MngdConnSvc::DataIpInfo, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t> deploy_ipv4Info(static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t* >(nullptr));
+    CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::string,
+                CommonAPI::SomeIP::StringDeployment
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::Result,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t
+            >,
+            CommonAPI::Deployable<
+                std::string,
+                CommonAPI::SomeIP::StringDeployment
+            >,
+            CommonAPI::Deployable<
+                MngdConnSvc::DataIpInfo,
+                ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t
+            >
+        >
+    >::callMethodWithReply(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x1304),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_name,
+        _internalCallStatus,
+        deploy_error,
+        deploy_ifName, deploy_ipv4Info);
+    _error = deploy_error.getValue();
+    _ifName = deploy_ifName.getValue();
+    _ipv4Info = deploy_ipv4Info.getValue();
+}
+
+std::future<CommonAPI::CallStatus> MngdConnSvcSomeIPProxy::GetDataIpv4InfoAsync(const std::string &_name, GetDataIpv4InfoAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
+    CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_name(_name, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
+    CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_ifName(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
+    CommonAPI::Deployable< MngdConnSvc::DataIpInfo, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t> deploy_ipv4Info(static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t* >(nullptr));
+    return CommonAPI::SomeIP::ProxyHelper<
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                std::string,
+                CommonAPI::SomeIP::StringDeployment
+            >
+        >,
+        CommonAPI::SomeIP::SerializableArguments<
+            CommonAPI::Deployable<
+                ::v0::com::qualcomm::qti::modem::CommonTypes::Result,
+                ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t
+            >,
+            CommonAPI::Deployable<
+                std::string,
+                CommonAPI::SomeIP::StringDeployment
+            >,
+            CommonAPI::Deployable<
+                MngdConnSvc::DataIpInfo,
+                ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t
+            >
+        >
+    >::callMethodAsync(
+        *this,
+        CommonAPI::SomeIP::method_id_t(0x1304),
+        false,
+        false,
+        (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
+        deploy_name,
+        [_callback] (CommonAPI::CallStatus _internalCallStatus, CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t > _deploy_error, CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment > _ifName, CommonAPI::Deployable< MngdConnSvc::DataIpInfo, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t > _ipv4Info) {
+            if (_callback)
+                _callback(_internalCallStatus, _deploy_error.getValue(), _ifName.getValue(), _ipv4Info.getValue());
+        },
+        std::make_tuple(deploy_error, deploy_ifName, deploy_ipv4Info));
 }
 
 void MngdConnSvcSomeIPProxy::getOwnVersion(uint16_t& ownVersionMajor, uint16_t& ownVersionMinor) const {

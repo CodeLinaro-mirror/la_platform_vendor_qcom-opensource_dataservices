@@ -72,8 +72,6 @@ public:
     virtual std::future<void> getCompletionFuture();
 
     /**
-     * description: 
-     * Starts a data session for the given data name.
      * Calls StartData with synchronous semantics.
      *
      * All const parameters are input parameters to this method.
@@ -94,8 +92,6 @@ public:
      */
     virtual std::future<CommonAPI::CallStatus> StartDataAsync(const std::string &_name, StartDataAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
     /**
-     * description: 
-     * Stops a data cellular session for the given name.
      * Calls StopData with synchronous semantics.
      *
      * All const parameters are input parameters to this method.
@@ -116,8 +112,6 @@ public:
      */
     virtual std::future<CommonAPI::CallStatus> StopDataAsync(const std::string &_name, StopDataAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
     /**
-     * description: 
-     * Gets connection state information for all currently running datas.
      * Calls GetDataList with synchronous semantics.
      *
      * All non-const parameters will be filled with the returned values.
@@ -137,10 +131,27 @@ public:
      * It will provide the same value for CallStatus as will be handed to the callback.
      */
     virtual std::future<CommonAPI::CallStatus> GetDataListAsync(GetDataListAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
-    /*
-     * description: 
-     * Events to report data state.
+    /**
+     * Calls GetDataIpv4Info with synchronous semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
      */
+    virtual void GetDataIpv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIpInfo &_ipv4Info, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls GetDataIpv4Info with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> GetDataIpv4InfoAsync(const std::string &_name, GetDataIpv4InfoAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
     /**
      * Returns the wrapper class that provides access to the broadcast DataState.
      */
@@ -170,10 +181,6 @@ template <typename ... _AttributeExtensions>
 MngdConnSvcProxy<_AttributeExtensions...>::~MngdConnSvcProxy() {
 }
 
-/*
- * description: 
- * Starts a data session for the given data name.
- */
 template <typename ... _AttributeExtensions>
 void MngdConnSvcProxy<_AttributeExtensions...>::StartData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     delegate_->StartData(_name, _internalCallStatus, _error, _info);
@@ -183,10 +190,6 @@ template <typename ... _AttributeExtensions>
 std::future<CommonAPI::CallStatus> MngdConnSvcProxy<_AttributeExtensions...>::StartDataAsync(const std::string &_name, StartDataAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
     return delegate_->StartDataAsync(_name, _callback, _info);
 }
-/*
- * description: 
- * Stops a data cellular session for the given name.
- */
 template <typename ... _AttributeExtensions>
 void MngdConnSvcProxy<_AttributeExtensions...>::StopData(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, const CommonAPI::CallInfo *_info) {
     delegate_->StopData(_name, _internalCallStatus, _error, _info);
@@ -196,10 +199,6 @@ template <typename ... _AttributeExtensions>
 std::future<CommonAPI::CallStatus> MngdConnSvcProxy<_AttributeExtensions...>::StopDataAsync(const std::string &_name, StopDataAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
     return delegate_->StopDataAsync(_name, _callback, _info);
 }
-/*
- * description: 
- * Gets connection state information for all currently running datas.
- */
 template <typename ... _AttributeExtensions>
 void MngdConnSvcProxy<_AttributeExtensions...>::GetDataList(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, uint8_t &_dataNum, std::vector< std::string > &_name, std::vector< MngdConnSvc::DataState > &_dataState, const CommonAPI::CallInfo *_info) {
     delegate_->GetDataList(_internalCallStatus, _error, _dataNum, _name, _dataState, _info);
@@ -208,6 +207,15 @@ void MngdConnSvcProxy<_AttributeExtensions...>::GetDataList(CommonAPI::CallStatu
 template <typename ... _AttributeExtensions>
 std::future<CommonAPI::CallStatus> MngdConnSvcProxy<_AttributeExtensions...>::GetDataListAsync(GetDataListAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
     return delegate_->GetDataListAsync(_callback, _info);
+}
+template <typename ... _AttributeExtensions>
+void MngdConnSvcProxy<_AttributeExtensions...>::GetDataIpv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIpInfo &_ipv4Info, const CommonAPI::CallInfo *_info) {
+    delegate_->GetDataIpv4Info(_name, _internalCallStatus, _error, _ifName, _ipv4Info, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> MngdConnSvcProxy<_AttributeExtensions...>::GetDataIpv4InfoAsync(const std::string &_name, GetDataIpv4InfoAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    return delegate_->GetDataIpv4InfoAsync(_name, _callback, _info);
 }
 
 template <typename ... _AttributeExtensions>
