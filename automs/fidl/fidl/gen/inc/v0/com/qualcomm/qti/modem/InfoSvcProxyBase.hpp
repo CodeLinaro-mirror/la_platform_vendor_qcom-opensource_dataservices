@@ -46,10 +46,6 @@ public:
 
     typedef std::function<void(const CommonAPI::CallStatus&, const ::v0::com::qualcomm::qti::modem::CommonTypes::Result&, const std::string&)> GetImeiAsyncCallback;
 
-    /*
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
-     */
     virtual void GetImei(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imei, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetImeiAsync(GetImeiAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
 

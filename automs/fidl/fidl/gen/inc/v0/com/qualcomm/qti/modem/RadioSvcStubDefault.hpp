@@ -63,10 +63,6 @@ public:
         return &remoteEventHandler_;
     }
 
-    /*
-     * description: 
-     * Set power state of the Radio
-     */
     COMMONAPI_EXPORT virtual void SetRadioPower(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType _power, SetRadioPowerReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -74,10 +70,6 @@ public:
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
         _reply(error);
     }
-    /*
-     * description: 
-     * Get power state of the Radio
-     */
     COMMONAPI_EXPORT virtual void GetRadioPower(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRadioPowerReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -100,10 +92,6 @@ public:
         RadioSvc::SignalMetrics signalStrength = {};
         _reply(error, signalStrength);
     }
-    /*
-     * description: 
-     * Get the network registration mode
-     */
     COMMONAPI_EXPORT virtual void GetRegisterMode(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRegisterModeReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -113,20 +101,12 @@ public:
         std::string mnc = "";
         _reply(error, isManual, mcc, mnc);
     }
-    /*
-     * description: 
-     * Registers to network using automatic mode
-     */
     COMMONAPI_EXPORT virtual void SetAutomaticRegisterMode(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, SetAutomaticRegisterModeReply_t _reply) {
         (void)_client;
         (void)_phoneId;
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
         _reply(error);
     }
-    /*
-     * description: 
-     * Gets SIM maximum counts and RAT capabilities
-     */
     COMMONAPI_EXPORT virtual void GetHardwareConfig(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetHardwareConfigReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -137,10 +117,6 @@ public:
         RadioSvc::RatBitMask simRatCapMask = 0ul;
         _reply(error, totalSimCount, maxActiveSims, deviceRatCapMask, simRatCapMask);
     }
-    /*
-     * description: 
-     * Gets the RAT preferences
-     */
     COMMONAPI_EXPORT virtual void GetRatPreferences(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRatPreferencesReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -148,10 +124,6 @@ public:
         RadioSvc::RatBitMask ratMask = 0ul;
         _reply(error, ratMask);
     }
-    /*
-     * description: 
-     * Gets the long name and short name of the network
-     */
     COMMONAPI_EXPORT virtual void GetCurrentNetworkName(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetCurrentNetworkNameReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -160,10 +132,6 @@ public:
         std::string shortName = "";
         _reply(error, longName, shortName);
     }
-    /*
-     * description: 
-     * Gets the current registration state
-     */
     COMMONAPI_EXPORT virtual void GetNetRegState(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetNetRegStateReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -181,10 +149,6 @@ public:
         }
         _reply(error, rat, cellId, mcc, mnc, netReg);
     }
-    /*
-     * description: 
-     * Gets the DCNR and ENDC mode status
-     */
     COMMONAPI_EXPORT virtual void GetNrDualConnectivityStatus(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetNrDualConnectivityStatusReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -195,10 +159,6 @@ public:
         }
         _reply(error, statusDcnr);
     }
-    /*
-     * description: 
-     * Sets signal reporting criteria.
-     */
     COMMONAPI_EXPORT virtual void SetSignalStrengthReportingCriteria(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::SigType _sigType, RadioSvc::SigStrengthIndication _ind, RadioSvc::SigStrengthHysteresis _hyst, SetSignalStrengthReportingCriteriaReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -208,10 +168,16 @@ public:
         ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
         _reply(error);
     }
-    /*
-     * description: 
-     * Event to report signal strength change
-     */
+    COMMONAPI_EXPORT virtual void GetPacketSwitchedState(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetPacketSwitchedStateReply_t _reply) {
+        (void)_client;
+        (void)_phoneId;
+        ::v0::com::qualcomm::qti::modem::CommonTypes::Result error;
+        RadioSvc::NetRegState netState = RadioSvc::NetRegState::NET_REG_STATE_NONE;
+        if (!netState.validate()) {
+            return;
+        }
+        _reply(error, netState);
+    }
     COMMONAPI_EXPORT virtual void fireSignalStrengthEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::Rat &_rat, const int32_t &_ss, const int32_t &_rsrp) {
         if (!_phoneId.validate()) {
             return;
@@ -221,10 +187,6 @@ public:
         }
         RadioSvcStub::fireSignalStrengthEvent(_phoneId, _rat, _ss, _rsrp);
     }
-    /*
-     * description: 
-     * Event to report RAT change
-     */
     COMMONAPI_EXPORT virtual void fireRadioRatEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::Rat &_rat) {
         if (!_phoneId.validate()) {
             return;
@@ -234,20 +196,12 @@ public:
         }
         RadioSvcStub::fireRadioRatEvent(_phoneId, _rat);
     }
-    /*
-     * description: 
-     * Event to radio state change
-     */
     COMMONAPI_EXPORT virtual void fireRadioStateEvent(const ::v0::com::qualcomm::qti::modem::RadioSvc::States &_radioState) {
         if (!_radioState.validate()) {
             return;
         }
         RadioSvcStub::fireRadioStateEvent(_radioState);
     }
-    /*
-     * description: 
-     * Event to report cell info change
-     */
     COMMONAPI_EXPORT virtual void fireCellInfoEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::CellInfoStatus &_status) {
         if (!_phoneId.validate()) {
             return;

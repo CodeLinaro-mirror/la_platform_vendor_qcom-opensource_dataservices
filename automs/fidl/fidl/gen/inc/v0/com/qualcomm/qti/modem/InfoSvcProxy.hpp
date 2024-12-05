@@ -72,8 +72,6 @@ public:
     virtual std::future<void> getCompletionFuture();
 
     /**
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
      * Calls GetImei with synchronous semantics.
      *
      * All non-const parameters will be filled with the returned values.
@@ -116,10 +114,6 @@ template <typename ... _AttributeExtensions>
 InfoSvcProxy<_AttributeExtensions...>::~InfoSvcProxy() {
 }
 
-/*
- * description: 
- * Retrieves the International Mobile Equipment Identity (IMEI).
- */
 template <typename ... _AttributeExtensions>
 void InfoSvcProxy<_AttributeExtensions...>::GetImei(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imei, const CommonAPI::CallInfo *_info) {
     delegate_->GetImei(_internalCallStatus, _error, _imei, _info);
