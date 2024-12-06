@@ -131,24 +131,17 @@ public:
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error, RadioSvc::Rat _rat, uint32_t _cellId, std::string _mcc, std::string _mnc, RadioSvc::NetRegState _netReg)> GetNetRegStateReply_t;
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error, RadioSvc::NRDcnrRestriction _statusDcnr)> GetNrDualConnectivityStatusReply_t;
     typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error)> SetSignalStrengthReportingCriteriaReply_t;
+    typedef std::function<void (::v0::com::qualcomm::qti::modem::CommonTypes::Result _error, RadioSvc::NetRegState _netState)> GetPacketSwitchedStateReply_t;
 
     virtual ~RadioSvcStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 22);
+        return (_id < 16);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
-    /*
-     * description: 
-     * Set power state of the Radio
-     */
     /// This is the method that will be called on remote calls on the method SetRadioPower.
     virtual void SetRadioPower(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, ::v0::com::qualcomm::qti::modem::CommonTypes::OnOffType _power, SetRadioPowerReply_t _reply) = 0;
-    /*
-     * description: 
-     * Get power state of the Radio
-     */
     /// This is the method that will be called on remote calls on the method GetRadioPower.
     virtual void GetRadioPower(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRadioPowerReply_t _reply) = 0;
     /*
@@ -157,88 +150,42 @@ public:
      */
     /// This is the method that will be called on remote calls on the method GetSignalStrength.
     virtual void GetSignalStrength(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::Rat _rat, GetSignalStrengthReply_t _reply) = 0;
-    /*
-     * description: 
-     * Get the network registration mode
-     */
     /// This is the method that will be called on remote calls on the method GetRegisterMode.
     virtual void GetRegisterMode(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRegisterModeReply_t _reply) = 0;
-    /*
-     * description: 
-     * Registers to network using automatic mode
-     */
     /// This is the method that will be called on remote calls on the method SetAutomaticRegisterMode.
     virtual void SetAutomaticRegisterMode(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, SetAutomaticRegisterModeReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets SIM maximum counts and RAT capabilities
-     */
     /// This is the method that will be called on remote calls on the method GetHardwareConfig.
     virtual void GetHardwareConfig(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetHardwareConfigReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets the RAT preferences
-     */
     /// This is the method that will be called on remote calls on the method GetRatPreferences.
     virtual void GetRatPreferences(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetRatPreferencesReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets the long name and short name of the network
-     */
     /// This is the method that will be called on remote calls on the method GetCurrentNetworkName.
     virtual void GetCurrentNetworkName(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetCurrentNetworkNameReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets the current registration state
-     */
     /// This is the method that will be called on remote calls on the method GetNetRegState.
     virtual void GetNetRegState(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetNetRegStateReply_t _reply) = 0;
-    /*
-     * description: 
-     * Gets the DCNR and ENDC mode status
-     */
     /// This is the method that will be called on remote calls on the method GetNrDualConnectivityStatus.
     virtual void GetNrDualConnectivityStatus(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetNrDualConnectivityStatusReply_t _reply) = 0;
-    /*
-     * description: 
-     * Sets signal reporting criteria.
-     */
     /// This is the method that will be called on remote calls on the method SetSignalStrengthReportingCriteria.
     virtual void SetSignalStrengthReportingCriteria(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, RadioSvc::SigType _sigType, RadioSvc::SigStrengthIndication _ind, RadioSvc::SigStrengthHysteresis _hyst, SetSignalStrengthReportingCriteriaReply_t _reply) = 0;
-    /*
-     * description: 
-     * Event to report signal strength change
-     */
+    /// This is the method that will be called on remote calls on the method GetPacketSwitchedState.
+    virtual void GetPacketSwitchedState(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetPacketSwitchedStateReply_t _reply) = 0;
     /// Sends a broadcast event for SignalStrength.
     virtual void fireSignalStrengthEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::Rat &_rat, const int32_t &_ss, const int32_t &_rsrp) {
         auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
             stubAdapter->fireSignalStrengthEvent(_phoneId, _rat, _ss, _rsrp);
     }
-    /*
-     * description: 
-     * Event to report RAT change
-     */
     /// Sends a broadcast event for RadioRat.
     virtual void fireRadioRatEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::Rat &_rat) {
         auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
             stubAdapter->fireRadioRatEvent(_phoneId, _rat);
     }
-    /*
-     * description: 
-     * Event to radio state change
-     */
     /// Sends a broadcast event for RadioState.
     virtual void fireRadioStateEvent(const ::v0::com::qualcomm::qti::modem::RadioSvc::States &_radioState) {
         auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
             stubAdapter->fireRadioStateEvent(_radioState);
     }
-    /*
-     * description: 
-     * Event to report cell info change
-     */
     /// Sends a broadcast event for CellInfo.
     virtual void fireCellInfoEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::RadioSvc::CellInfoStatus &_status) {
         auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();

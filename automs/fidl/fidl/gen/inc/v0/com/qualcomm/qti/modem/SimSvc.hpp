@@ -41,8 +41,8 @@ public:
     static inline const char* getInterface();
     static inline CommonAPI::Version getInterfaceVersion();
     
-    struct States : CommonAPI::Enumeration< uint32_t> {
-        enum Literal : uint32_t {
+    struct States : CommonAPI::Enumeration< uint8_t> {
+        enum Literal : uint8_t {
             PRESENT = 0,
             ABSENT = 1,
             READY = 2,
@@ -52,18 +52,18 @@ public:
         };
     
         States()
-            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::PRESENT)) {}
+            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::PRESENT)) {}
         States(Literal _literal)
-            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint32_t>(Literal::PRESENT):
-                case static_cast< uint32_t>(Literal::ABSENT):
-                case static_cast< uint32_t>(Literal::READY):
-                case static_cast< uint32_t>(Literal::RESTRICTED):
-                case static_cast< uint32_t>(Literal::ERROR):
-                case static_cast< uint32_t>(Literal::STATE_UNKNOWN):
+                case static_cast< uint8_t>(Literal::PRESENT):
+                case static_cast< uint8_t>(Literal::ABSENT):
+                case static_cast< uint8_t>(Literal::READY):
+                case static_cast< uint8_t>(Literal::RESTRICTED):
+                case static_cast< uint8_t>(Literal::ERROR):
+                case static_cast< uint8_t>(Literal::STATE_UNKNOWN):
                 return true;
             default:
                 return false;
@@ -77,23 +77,23 @@ public:
         inline bool operator<(const States &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const States &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint32_t>(Literal::PRESENT): return "PRESENT";
-            case static_cast< uint32_t>(Literal::ABSENT): return "ABSENT";
-            case static_cast< uint32_t>(Literal::READY): return "READY";
-            case static_cast< uint32_t>(Literal::RESTRICTED): return "RESTRICTED";
-            case static_cast< uint32_t>(Literal::ERROR): return "ERROR";
-            case static_cast< uint32_t>(Literal::STATE_UNKNOWN): return "STATE_UNKNOWN";
+            case static_cast< uint8_t>(Literal::PRESENT): return "PRESENT";
+            case static_cast< uint8_t>(Literal::ABSENT): return "ABSENT";
+            case static_cast< uint8_t>(Literal::READY): return "READY";
+            case static_cast< uint8_t>(Literal::RESTRICTED): return "RESTRICTED";
+            case static_cast< uint8_t>(Literal::ERROR): return "ERROR";
+            case static_cast< uint8_t>(Literal::STATE_UNKNOWN): return "STATE_UNKNOWN";
             default: return "UNDEFINED";
             }
         }
@@ -108,10 +108,6 @@ CommonAPI::Version SimSvc::getInterfaceVersion() {
     return CommonAPI::Version(0, 1);
 }
 
-/*
- * description: 
- * State of the card
- */
 
 } // namespace modem
 } // namespace qti

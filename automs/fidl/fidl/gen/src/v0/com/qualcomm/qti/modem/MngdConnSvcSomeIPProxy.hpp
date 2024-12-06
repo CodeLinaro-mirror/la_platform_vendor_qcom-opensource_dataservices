@@ -73,9 +73,13 @@ public:
 
     virtual std::future<CommonAPI::CallStatus> GetDataListAsync(GetDataListAsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
-    virtual void GetDataIpv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIpInfo &_ipv4Info, const CommonAPI::CallInfo *_info);
+    virtual void GetDataIPv4Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIPInfo &_ipv4Info, const CommonAPI::CallInfo *_info);
 
-    virtual std::future<CommonAPI::CallStatus> GetDataIpv4InfoAsync(const std::string &_name, GetDataIpv4InfoAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+    virtual std::future<CommonAPI::CallStatus> GetDataIPv4InfoAsync(const std::string &_name, GetDataIPv4InfoAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+
+    virtual void GetDataIPv6Info(std::string _name, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_ifName, MngdConnSvc::DataIPInfo &_ipv6Info, const CommonAPI::CallInfo *_info);
+
+    virtual std::future<CommonAPI::CallStatus> GetDataIPv6InfoAsync(const std::string &_name, GetDataIPv6InfoAsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 

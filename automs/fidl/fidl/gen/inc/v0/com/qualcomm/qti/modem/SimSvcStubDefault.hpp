@@ -63,10 +63,6 @@ public:
         return &remoteEventHandler_;
     }
 
-    /*
-     * description: 
-     * Retrieves the IMSI for the SIM
-     */
     COMMONAPI_EXPORT virtual void GetImsi(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetImsiReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -88,10 +84,6 @@ public:
         }
         _reply(error, simState);
     }
-    /*
-     * description: 
-     * Retrieves the SIM's ICCID
-     */
     COMMONAPI_EXPORT virtual void GetICCID(const std::shared_ptr<CommonAPI::ClientId> _client, ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, GetICCIDReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -99,10 +91,6 @@ public:
         std::string iccid = "";
         _reply(error, iccid);
     }
-    /*
-     * description: 
-     * SIM card state change event
-     */
     COMMONAPI_EXPORT virtual void fireSimStateEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::SimSvc::States &_simState) {
         if (!_phoneId.validate()) {
             return;

@@ -87,10 +87,18 @@ public:
     CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
         ::v0::com::qualcomm::qti::modem::MngdConnSvcStub,
         std::tuple< std::string>,
-        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, std::string, MngdConnSvc::DataIpInfo>,
+        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, std::string, MngdConnSvc::DataIPInfo>,
         std::tuple< CommonAPI::SomeIP::StringDeployment>,
-        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t, CommonAPI::SomeIP::StringDeployment, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t>
-    > getDataIpv4InfoStubDispatcher;
+        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t, CommonAPI::SomeIP::StringDeployment, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIPInfoDeployment_t>
+    > getDataIPv4InfoStubDispatcher;
+    
+    CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
+        ::v0::com::qualcomm::qti::modem::MngdConnSvcStub,
+        std::tuple< std::string>,
+        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, std::string, MngdConnSvc::DataIPInfo>,
+        std::tuple< CommonAPI::SomeIP::StringDeployment>,
+        std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t, CommonAPI::SomeIP::StringDeployment, ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIPInfoDeployment_t>
+    > getDataIPv6InfoStubDispatcher;
     
     MngdConnSvcSomeIPStubAdapterInternal(
         const CommonAPI::SomeIP::Address &_address,
@@ -126,18 +134,27 @@ public:
             std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), static_cast< CommonAPI::SomeIP::ArrayDeployment< CommonAPI::SomeIP::StringDeployment >* >(nullptr), static_cast< CommonAPI::SomeIP::ArrayDeployment< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataStateDeployment_t >* >(nullptr)))
         
         ,
-        getDataIpv4InfoStubDispatcher(
-            &MngdConnSvcStub::GetDataIpv4Info,
+        getDataIPv4InfoStubDispatcher(
+            &MngdConnSvcStub::GetDataIPv4Info,
             false,
             _stub->hasElement(4),
             std::make_tuple(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr)),
-            std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIpInfoDeployment_t* >(nullptr)))
+            std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIPInfoDeployment_t* >(nullptr)))
+        
+        ,
+        getDataIPv6InfoStubDispatcher(
+            &MngdConnSvcStub::GetDataIPv6Info,
+            false,
+            _stub->hasElement(5),
+            std::make_tuple(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr)),
+            std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v0::com::qualcomm::qti::modem::MngdConnSvc_::DataIPInfoDeployment_t* >(nullptr)))
         
     {
         MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1301) }, &startDataStubDispatcher );
         MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1302) }, &stopDataStubDispatcher );
         MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1303) }, &getDataListStubDispatcher );
-        MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1304) }, &getDataIpv4InfoStubDispatcher );
+        MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1304) }, &getDataIPv4InfoStubDispatcher );
+        MngdConnSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1305) }, &getDataIPv6InfoStubDispatcher );
         // Provided events/fields
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;

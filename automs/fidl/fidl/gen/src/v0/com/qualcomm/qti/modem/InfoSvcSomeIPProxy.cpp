@@ -59,10 +59,6 @@ InfoSvcSomeIPProxy::~InfoSvcSomeIPProxy() {
 
 
 
-/*
- * description: 
- * Retrieves the International Mobile Equipment Identity (IMEI).
- */
 void InfoSvcSomeIPProxy::GetImei(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imei, const CommonAPI::CallInfo *_info) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::Result, ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t> deploy_error(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment);
     CommonAPI::Deployable< std::string, CommonAPI::SomeIP::StringDeployment> deploy_imei(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr));
@@ -81,7 +77,7 @@ void InfoSvcSomeIPProxy::GetImei(CommonAPI::CallStatus &_internalCallStatus, ::v
         >
     >::callMethodWithReply(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1201),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
@@ -110,7 +106,7 @@ std::future<CommonAPI::CallStatus> InfoSvcSomeIPProxy::GetImeiAsync(GetImeiAsync
         >
     >::callMethodAsync(
         *this,
-        CommonAPI::SomeIP::method_id_t(0x753a),
+        CommonAPI::SomeIP::method_id_t(0x1201),
         false,
         false,
         (_info ? _info : &CommonAPI::SomeIP::defaultCallInfo),
