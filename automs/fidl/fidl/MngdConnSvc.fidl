@@ -1,0 +1,98 @@
+/*
+* Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+* SPDX-License-Identifier: BSD-3-Clause-Clear
+*/
+
+package com.qualcomm.qti.modem
+import com.qualcomm.qti.modem.CommonTypes.* from "../common/CommonTypes.fidl"
+
+interface MngdConnSvc
+{
+    version { major 0 minor 1 }
+
+    <** @description: Maximum number of data in the system **>
+    const UInt8 MAX_DATA_NUM = 4
+
+    <** @description: The data state. **>
+    enumeration DataState
+    {
+        DATA_DISCONNECTED       ///< Transition state to CONNECTED or FAILED.
+        DATA_CONNECTED          ///< Data connected state.
+        DATA_CONNECTION_FAILED  ///< The service is not able to reconnect data even after retries.
+        DATA_CONNECTION_STALLED ///< Transition state to CONNECTED or DISCONNECTED.
+    }
+
+    /**
+    * Starts a data session for the given data reference. This API should be used when the value of
+    * "AutoStart" is "No" in the configuration file.
+    *
+    * The service tracks clients that call StartData for Data objects with AutoStart:No and is used
+    * to manage StopData behavior.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - DUPLICATE -- The data connection is already started.
+    *   - IN_PROGRESS -- The data connection establishment retry is in progress.
+    *   - Appropriate error is returned on failure.
+    */
+    <** @description: Starts a data session for the given data name. **>
+    method StartData
+    {
+        in
+        {
+            String name         ///< The data name to use.
+        }
+        error Result            ///< return result.
+    }
+
+    /**
+    * Stops a data cellular session for the given data reference.
+    *
+    * Data will be stopped only when all clients that have called StartData for data objects with
+    * AutoStart:No either stop data or exit.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - NOT_PERMITTED -- If data is auto started by the service, application cannot stop data.
+    *   - Appropriate error is returned on failure.
+    */
+    <** @description: Stops a data cellular session for the given name. **>
+    method StopData
+    {
+        in
+        {
+            String name         ///< The data name to use.
+        }
+        error Result            ///< return result.
+    }
+
+    /**
+    * Gets the data connection state information for the given data reference.
+    *
+    * @return
+    *   - OK -- Succeeded.
+    *   - BAD_PARAMETER -- Bad parameter.
+    *   - Appropriate error is returned on failure.
+    */
+    <** @description: Gets connection state information for all currently running datas. **>
+    method GetDataList
+    {
+        out
+        {
+            UInt8 dataNum                       ///< The number of data that has already started.
+            String[] name                       ///< The data name to use.
+            DataState[] dataState               ///< The data state.
+        }
+        error Result                            ///< return result.
+    }
+
+    <** @description: Events to report data state.  **>
+    broadcast DataState
+    {
+        out
+        {
+            String name             ///< The data name to use.
+            DataState dataState     ///< The data state.
+        }
+    }
+}
