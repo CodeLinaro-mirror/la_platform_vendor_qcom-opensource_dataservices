@@ -57,10 +57,6 @@ public:
         CommonAPI::Version
     > getInfoSvcInterfaceVersionStubDispatcher;
 
-    /*
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
-     */
     CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
         ::v0::com::qualcomm::qti::modem::InfoSvcStub,
         std::tuple< >,
@@ -87,11 +83,7 @@ public:
             std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr)))
         
     {
-        /*
-         * description: 
-         * Retrieves the International Mobile Equipment Identity (IMEI).
-         */
-        InfoSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x753a) }, &getImeiStubDispatcher );
+        InfoSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1201) }, &getImeiStubDispatcher );
         // Provided events/fields
     }
 

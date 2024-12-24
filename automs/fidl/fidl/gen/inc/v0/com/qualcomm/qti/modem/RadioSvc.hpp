@@ -107,8 +107,8 @@ public:
         }
     };
     
-    struct Rat : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct Rat : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             RAT_UNKNOWN = 0,
             RAT_GSM = 1,
             RAT_GPRS = 2,
@@ -126,26 +126,26 @@ public:
         };
     
         Rat()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::RAT_UNKNOWN)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::RAT_UNKNOWN)) {}
         Rat(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::RAT_UNKNOWN):
-                case static_cast< uint8_t>(Literal::RAT_GSM):
-                case static_cast< uint8_t>(Literal::RAT_GPRS):
-                case static_cast< uint8_t>(Literal::RAT_EDGE):
-                case static_cast< uint8_t>(Literal::RAT_EHRPD):
-                case static_cast< uint8_t>(Literal::RAT_UMTS):
-                case static_cast< uint8_t>(Literal::RAT_HSPA):
-                case static_cast< uint8_t>(Literal::RAT_HSDPA):
-                case static_cast< uint8_t>(Literal::RAT_HSUPA):
-                case static_cast< uint8_t>(Literal::RAT_HSPAP):
-                case static_cast< uint8_t>(Literal::RAT_TDSCDMA):
-                case static_cast< uint8_t>(Literal::RAT_LTE):
-                case static_cast< uint8_t>(Literal::RAT_LTE_CA):
-                case static_cast< uint8_t>(Literal::RAT_NR5G):
+                case static_cast< uint32_t>(Literal::RAT_UNKNOWN):
+                case static_cast< uint32_t>(Literal::RAT_GSM):
+                case static_cast< uint32_t>(Literal::RAT_GPRS):
+                case static_cast< uint32_t>(Literal::RAT_EDGE):
+                case static_cast< uint32_t>(Literal::RAT_EHRPD):
+                case static_cast< uint32_t>(Literal::RAT_UMTS):
+                case static_cast< uint32_t>(Literal::RAT_HSPA):
+                case static_cast< uint32_t>(Literal::RAT_HSDPA):
+                case static_cast< uint32_t>(Literal::RAT_HSUPA):
+                case static_cast< uint32_t>(Literal::RAT_HSPAP):
+                case static_cast< uint32_t>(Literal::RAT_TDSCDMA):
+                case static_cast< uint32_t>(Literal::RAT_LTE):
+                case static_cast< uint32_t>(Literal::RAT_LTE_CA):
+                case static_cast< uint32_t>(Literal::RAT_NR5G):
                 return true;
             default:
                 return false;
@@ -159,38 +159,38 @@ public:
         inline bool operator<(const Rat &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const Rat &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::RAT_UNKNOWN): return "RAT_UNKNOWN";
-            case static_cast< uint8_t>(Literal::RAT_GSM): return "RAT_GSM";
-            case static_cast< uint8_t>(Literal::RAT_GPRS): return "RAT_GPRS";
-            case static_cast< uint8_t>(Literal::RAT_EDGE): return "RAT_EDGE";
-            case static_cast< uint8_t>(Literal::RAT_EHRPD): return "RAT_EHRPD";
-            case static_cast< uint8_t>(Literal::RAT_UMTS): return "RAT_UMTS";
-            case static_cast< uint8_t>(Literal::RAT_HSPA): return "RAT_HSPA";
-            case static_cast< uint8_t>(Literal::RAT_HSDPA): return "RAT_HSDPA";
-            case static_cast< uint8_t>(Literal::RAT_HSUPA): return "RAT_HSUPA";
-            case static_cast< uint8_t>(Literal::RAT_HSPAP): return "RAT_HSPAP";
-            case static_cast< uint8_t>(Literal::RAT_TDSCDMA): return "RAT_TDSCDMA";
-            case static_cast< uint8_t>(Literal::RAT_LTE): return "RAT_LTE";
-            case static_cast< uint8_t>(Literal::RAT_LTE_CA): return "RAT_LTE_CA";
-            case static_cast< uint8_t>(Literal::RAT_NR5G): return "RAT_NR5G";
+            case static_cast< uint32_t>(Literal::RAT_UNKNOWN): return "RAT_UNKNOWN";
+            case static_cast< uint32_t>(Literal::RAT_GSM): return "RAT_GSM";
+            case static_cast< uint32_t>(Literal::RAT_GPRS): return "RAT_GPRS";
+            case static_cast< uint32_t>(Literal::RAT_EDGE): return "RAT_EDGE";
+            case static_cast< uint32_t>(Literal::RAT_EHRPD): return "RAT_EHRPD";
+            case static_cast< uint32_t>(Literal::RAT_UMTS): return "RAT_UMTS";
+            case static_cast< uint32_t>(Literal::RAT_HSPA): return "RAT_HSPA";
+            case static_cast< uint32_t>(Literal::RAT_HSDPA): return "RAT_HSDPA";
+            case static_cast< uint32_t>(Literal::RAT_HSUPA): return "RAT_HSUPA";
+            case static_cast< uint32_t>(Literal::RAT_HSPAP): return "RAT_HSPAP";
+            case static_cast< uint32_t>(Literal::RAT_TDSCDMA): return "RAT_TDSCDMA";
+            case static_cast< uint32_t>(Literal::RAT_LTE): return "RAT_LTE";
+            case static_cast< uint32_t>(Literal::RAT_LTE_CA): return "RAT_LTE_CA";
+            case static_cast< uint32_t>(Literal::RAT_NR5G): return "RAT_NR5G";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct NetRegState : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct NetRegState : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             NET_REG_STATE_NONE = 0,
             NET_REG_STATE_HOME = 1,
             NET_REG_STATE_SEARCHING = 2,
@@ -201,19 +201,19 @@ public:
         };
     
         NetRegState()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::NET_REG_STATE_NONE)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::NET_REG_STATE_NONE)) {}
         NetRegState(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_NONE):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_HOME):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_SEARCHING):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_DENIED):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_ROAMING):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_UNKNOWN):
-                case static_cast< uint8_t>(Literal::NET_REG_STATE_EMERGENCY_AVAILABLE):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_NONE):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_HOME):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_SEARCHING):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_DENIED):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_ROAMING):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_UNKNOWN):
+                case static_cast< uint32_t>(Literal::NET_REG_STATE_EMERGENCY_AVAILABLE):
                 return true;
             default:
                 return false;
@@ -227,46 +227,46 @@ public:
         inline bool operator<(const NetRegState &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const NetRegState &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_NONE): return "NET_REG_STATE_NONE";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_HOME): return "NET_REG_STATE_HOME";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_SEARCHING): return "NET_REG_STATE_SEARCHING";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_DENIED): return "NET_REG_STATE_DENIED";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_ROAMING): return "NET_REG_STATE_ROAMING";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_UNKNOWN): return "NET_REG_STATE_UNKNOWN";
-            case static_cast< uint8_t>(Literal::NET_REG_STATE_EMERGENCY_AVAILABLE): return "NET_REG_STATE_EMERGENCY_AVAILABLE";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_NONE): return "NET_REG_STATE_NONE";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_HOME): return "NET_REG_STATE_HOME";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_SEARCHING): return "NET_REG_STATE_SEARCHING";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_DENIED): return "NET_REG_STATE_DENIED";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_ROAMING): return "NET_REG_STATE_ROAMING";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_UNKNOWN): return "NET_REG_STATE_UNKNOWN";
+            case static_cast< uint32_t>(Literal::NET_REG_STATE_EMERGENCY_AVAILABLE): return "NET_REG_STATE_EMERGENCY_AVAILABLE";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct NRDcnrRestriction : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct NRDcnrRestriction : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             NR_DCNR_UNKNOWN = 0,
             NR_DCNR_RESTRICTED = 1,
             NR_DCNR_UNRESTRICTED = 2
         };
     
         NRDcnrRestriction()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::NR_DCNR_UNKNOWN)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::NR_DCNR_UNKNOWN)) {}
         NRDcnrRestriction(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::NR_DCNR_UNKNOWN):
-                case static_cast< uint8_t>(Literal::NR_DCNR_RESTRICTED):
-                case static_cast< uint8_t>(Literal::NR_DCNR_UNRESTRICTED):
+                case static_cast< uint32_t>(Literal::NR_DCNR_UNKNOWN):
+                case static_cast< uint32_t>(Literal::NR_DCNR_RESTRICTED):
+                case static_cast< uint32_t>(Literal::NR_DCNR_UNRESTRICTED):
                 return true;
             default:
                 return false;
@@ -280,42 +280,42 @@ public:
         inline bool operator<(const NRDcnrRestriction &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const NRDcnrRestriction &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::NR_DCNR_UNKNOWN): return "NR_DCNR_UNKNOWN";
-            case static_cast< uint8_t>(Literal::NR_DCNR_RESTRICTED): return "NR_DCNR_RESTRICTED";
-            case static_cast< uint8_t>(Literal::NR_DCNR_UNRESTRICTED): return "NR_DCNR_UNRESTRICTED";
+            case static_cast< uint32_t>(Literal::NR_DCNR_UNKNOWN): return "NR_DCNR_UNKNOWN";
+            case static_cast< uint32_t>(Literal::NR_DCNR_RESTRICTED): return "NR_DCNR_RESTRICTED";
+            case static_cast< uint32_t>(Literal::NR_DCNR_UNRESTRICTED): return "NR_DCNR_UNRESTRICTED";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct States : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct States : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             OFF = 0,
             UNAVAILABLE = 1,
             ON = 2
         };
     
         States()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::OFF)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::OFF)) {}
         States(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::OFF):
-                case static_cast< uint8_t>(Literal::UNAVAILABLE):
-                case static_cast< uint8_t>(Literal::ON):
+                case static_cast< uint32_t>(Literal::OFF):
+                case static_cast< uint32_t>(Literal::UNAVAILABLE):
+                case static_cast< uint32_t>(Literal::ON):
                 return true;
             default:
                 return false;
@@ -329,42 +329,42 @@ public:
         inline bool operator<(const States &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const States &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::OFF): return "OFF";
-            case static_cast< uint8_t>(Literal::UNAVAILABLE): return "UNAVAILABLE";
-            case static_cast< uint8_t>(Literal::ON): return "ON";
+            case static_cast< uint32_t>(Literal::OFF): return "OFF";
+            case static_cast< uint32_t>(Literal::UNAVAILABLE): return "UNAVAILABLE";
+            case static_cast< uint32_t>(Literal::ON): return "ON";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct CellInfoStatus : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct CellInfoStatus : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             CELL_SERVING_CHANGED = 0,
             CELL_NEIGHBOR_CHANGED = 1,
             CELL_SERVING_AND_NEIGHBOR_CHANGED = 2
         };
     
         CellInfoStatus()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::CELL_SERVING_CHANGED)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::CELL_SERVING_CHANGED)) {}
         CellInfoStatus(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::CELL_SERVING_CHANGED):
-                case static_cast< uint8_t>(Literal::CELL_NEIGHBOR_CHANGED):
-                case static_cast< uint8_t>(Literal::CELL_SERVING_AND_NEIGHBOR_CHANGED):
+                case static_cast< uint32_t>(Literal::CELL_SERVING_CHANGED):
+                case static_cast< uint32_t>(Literal::CELL_NEIGHBOR_CHANGED):
+                case static_cast< uint32_t>(Literal::CELL_SERVING_AND_NEIGHBOR_CHANGED):
                 return true;
             default:
                 return false;
@@ -378,27 +378,27 @@ public:
         inline bool operator<(const CellInfoStatus &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const CellInfoStatus &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::CELL_SERVING_CHANGED): return "CELL_SERVING_CHANGED";
-            case static_cast< uint8_t>(Literal::CELL_NEIGHBOR_CHANGED): return "CELL_NEIGHBOR_CHANGED";
-            case static_cast< uint8_t>(Literal::CELL_SERVING_AND_NEIGHBOR_CHANGED): return "CELL_SERVING_AND_NEIGHBOR_CHANGED";
+            case static_cast< uint32_t>(Literal::CELL_SERVING_CHANGED): return "CELL_SERVING_CHANGED";
+            case static_cast< uint32_t>(Literal::CELL_NEIGHBOR_CHANGED): return "CELL_NEIGHBOR_CHANGED";
+            case static_cast< uint32_t>(Literal::CELL_SERVING_AND_NEIGHBOR_CHANGED): return "CELL_SERVING_AND_NEIGHBOR_CHANGED";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct SigType : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct SigType : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             SIG_TYPE_GSM_RSSI = 0,
             SIG_TYPE_UMTS_RSSI = 1,
             SIG_TYPE_LTE_RSRP = 2,
@@ -406,16 +406,16 @@ public:
         };
     
         SigType()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::SIG_TYPE_GSM_RSSI)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::SIG_TYPE_GSM_RSSI)) {}
         SigType(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::SIG_TYPE_GSM_RSSI):
-                case static_cast< uint8_t>(Literal::SIG_TYPE_UMTS_RSSI):
-                case static_cast< uint8_t>(Literal::SIG_TYPE_LTE_RSRP):
-                case static_cast< uint8_t>(Literal::SIG_TYPE_NR5G_RSRP):
+                case static_cast< uint32_t>(Literal::SIG_TYPE_GSM_RSSI):
+                case static_cast< uint32_t>(Literal::SIG_TYPE_UMTS_RSSI):
+                case static_cast< uint32_t>(Literal::SIG_TYPE_LTE_RSRP):
+                case static_cast< uint32_t>(Literal::SIG_TYPE_NR5G_RSRP):
                 return true;
             default:
                 return false;
@@ -429,41 +429,41 @@ public:
         inline bool operator<(const SigType &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const SigType &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::SIG_TYPE_GSM_RSSI): return "SIG_TYPE_GSM_RSSI";
-            case static_cast< uint8_t>(Literal::SIG_TYPE_UMTS_RSSI): return "SIG_TYPE_UMTS_RSSI";
-            case static_cast< uint8_t>(Literal::SIG_TYPE_LTE_RSRP): return "SIG_TYPE_LTE_RSRP";
-            case static_cast< uint8_t>(Literal::SIG_TYPE_NR5G_RSRP): return "SIG_TYPE_NR5G_RSRP";
+            case static_cast< uint32_t>(Literal::SIG_TYPE_GSM_RSSI): return "SIG_TYPE_GSM_RSSI";
+            case static_cast< uint32_t>(Literal::SIG_TYPE_UMTS_RSSI): return "SIG_TYPE_UMTS_RSSI";
+            case static_cast< uint32_t>(Literal::SIG_TYPE_LTE_RSRP): return "SIG_TYPE_LTE_RSRP";
+            case static_cast< uint32_t>(Literal::SIG_TYPE_NR5G_RSRP): return "SIG_TYPE_NR5G_RSRP";
             default: return "UNDEFINED";
             }
         }
     };
     
-    struct SigIndicationType : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
+    struct SigIndicationType : CommonAPI::Enumeration< uint32_t> {
+        enum Literal : uint32_t {
             SIG_THRESHOLD = 0,
             SIG_DELTA = 1
         };
     
         SigIndicationType()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::SIG_THRESHOLD)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(Literal::SIG_THRESHOLD)) {}
         SigIndicationType(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
+            : CommonAPI::Enumeration< uint32_t>(static_cast< uint32_t>(_literal)) {}
     
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::SIG_THRESHOLD):
-                case static_cast< uint8_t>(Literal::SIG_DELTA):
+                case static_cast< uint32_t>(Literal::SIG_THRESHOLD):
+                case static_cast< uint32_t>(Literal::SIG_DELTA):
                 return true;
             default:
                 return false;
@@ -477,19 +477,19 @@ public:
         inline bool operator<(const SigIndicationType &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const SigIndicationType &_other) const { return (value_ > _other.value_); }
     
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
+        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint32_t>(_value)); }
+        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint32_t>(_value)); }
+        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint32_t>(_value)); }
+        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint32_t>(_value)); }
+        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint32_t>(_value)); }
+        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint32_t>(_value)); }
     
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::SIG_THRESHOLD): return "SIG_THRESHOLD";
-            case static_cast< uint8_t>(Literal::SIG_DELTA): return "SIG_DELTA";
+            case static_cast< uint32_t>(Literal::SIG_THRESHOLD): return "SIG_THRESHOLD";
+            case static_cast< uint32_t>(Literal::SIG_DELTA): return "SIG_DELTA";
             default: return "UNDEFINED";
             }
         }

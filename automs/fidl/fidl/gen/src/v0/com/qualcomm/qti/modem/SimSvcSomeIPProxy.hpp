@@ -61,10 +61,6 @@ public:
 
     virtual SimStateEvent& getSimStateEvent();
 
-    /*
-     * description: 
-     * Retrieves the IMSI for the SIM
-     */
     virtual void GetImsi(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imsi, const CommonAPI::CallInfo *_info);
 
     virtual std::future<CommonAPI::CallStatus> GetImsiAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetImsiAsyncCallback _callback, const CommonAPI::CallInfo *_info);
@@ -77,10 +73,6 @@ public:
 
     virtual std::future<CommonAPI::CallStatus> GetStateAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetStateAsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
-    /*
-     * description: 
-     * Retrieves the SIM's ICCID
-     */
     virtual void GetICCID(::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId _phoneId, CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_iccid, const CommonAPI::CallInfo *_info);
 
     virtual std::future<CommonAPI::CallStatus> GetICCIDAsync(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, GetICCIDAsyncCallback _callback, const CommonAPI::CallInfo *_info);
