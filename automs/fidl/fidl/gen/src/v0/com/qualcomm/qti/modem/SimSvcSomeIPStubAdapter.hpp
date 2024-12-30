@@ -51,10 +51,6 @@ public:
         SimSvcSomeIPStubAdapterHelper::deinit();
     }
 
-    /*
-     * description: 
-     * SIM card state change event
-     */
     void fireSimStateEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::SimSvc::States &_simState);
 
     void deactivateManagedInstances() {}
@@ -64,10 +60,6 @@ public:
         CommonAPI::Version
     > getSimSvcInterfaceVersionStubDispatcher;
 
-    /*
-     * description: 
-     * Retrieves the IMSI for the SIM
-     */
     CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
         ::v0::com::qualcomm::qti::modem::SimSvcStub,
         std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId>,
@@ -88,10 +80,6 @@ public:
         std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment_t, ::v0::com::qualcomm::qti::modem::SimSvc_::StatesDeployment_t>
     > getStateStubDispatcher;
     
-    /*
-     * description: 
-     * Retrieves the SIM's ICCID
-     */
     CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
         ::v0::com::qualcomm::qti::modem::SimSvcStub,
         std::tuple< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId>,
@@ -134,26 +122,18 @@ public:
             std::make_tuple(&::v0::com::qualcomm::qti::modem::CommonTypes_::ResultDeployment, static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr)))
         
     {
-        /*
-         * description: 
-         * Retrieves the IMSI for the SIM
-         */
-        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x753a) }, &getImsiStubDispatcher );
+        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1101) }, &getImsiStubDispatcher );
         /*
          * description: 
          * Gets the state of the SIM card
          */
-        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x7544) }, &getStateStubDispatcher );
-        /*
-         * description: 
-         * Retrieves the SIM's ICCID
-         */
-        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x754e) }, &getICCIDStubDispatcher );
+        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1102) }, &getStateStubDispatcher );
+        SimSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x1103) }, &getICCIDStubDispatcher );
         // Provided events/fields
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
-            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x80f2));
-            CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x80f2), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
+            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x9100));
+            CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x9101), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
         }
     }
 
@@ -163,10 +143,6 @@ public:
 
 };
 
-/*
- * description: 
- * SIM card state change event
- */
 template <typename _Stub, typename... _Stubs>
 void SimSvcSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireSimStateEvent(const ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId &_phoneId, const ::v0::com::qualcomm::qti::modem::SimSvc::States &_simState) {
     CommonAPI::Deployable< ::v0::com::qualcomm::qti::modem::CommonTypes::PhoneId, ::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment_t> deployed_phoneId(_phoneId, &::v0::com::qualcomm::qti::modem::CommonTypes_::PhoneIdDeployment);
@@ -176,7 +152,7 @@ void SimSvcSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireSimStateEvent(const 
     >>
         ::sendEvent(
             *this,
-            CommonAPI::SomeIP::event_id_t(0x80f2),
+            CommonAPI::SomeIP::event_id_t(0x9101),
             false,
              deployed_phoneId 
             ,  deployed_simState 
