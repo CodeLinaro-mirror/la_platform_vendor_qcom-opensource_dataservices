@@ -38,7 +38,7 @@ typedef CommonAPI::SomeIP::StructDeployment<
     CommonAPI::SomeIP::StringDeployment,
     CommonAPI::SomeIP::StringDeployment,
     CommonAPI::SomeIP::IntegerDeployment<uint32_t>
-> DataIPInfoDeployment_t;
+> DataIpInfoDeployment_t;
 
 // Type-specific deployments
 
