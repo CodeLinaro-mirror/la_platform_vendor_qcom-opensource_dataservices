@@ -57,10 +57,6 @@ public:
 
     virtual ~InfoSvcSomeIPProxy();
 
-    /*
-     * description: 
-     * Retrieves the International Mobile Equipment Identity (IMEI).
-     */
     virtual void GetImei(CommonAPI::CallStatus &_internalCallStatus, ::v0::com::qualcomm::qti::modem::CommonTypes::Result &_error, std::string &_imei, const CommonAPI::CallInfo *_info);
 
     virtual std::future<CommonAPI::CallStatus> GetImeiAsync(GetImeiAsyncCallback _callback, const CommonAPI::CallInfo *_info);
