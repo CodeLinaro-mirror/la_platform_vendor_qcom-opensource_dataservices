@@ -1,13 +1,11 @@
 /*
-* Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-* SPDX-License-Identifier: BSD-3-Clause-Clear
-*/
+ * Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ */
 
 #include <ProxySvcBuilder.hpp>
 #include <chrono>
 #include <thread>
-
-using namespace v0::com::qualcomm::qti::modem;
 
 void ProxySvcBuilder::init() {
     // commonapi proxy init
@@ -16,38 +14,30 @@ void ProxySvcBuilder::init() {
     CommonAPI::Runtime::setProperty("LibraryBase", "TelephonyInterface");
 }
 
-std::shared_ptr<SimSvcProxy<>> ProxySvcBuilder::getSimSvcProxy() {
-    auto simProxy = CommonAPI::Runtime::get()->buildProxy<SimSvcProxy>("local", "modem.SimSvc",
+std::shared_ptr<SimSvc::SimSvcProxy<>> ProxySvcBuilder::getSimSvcProxy() {
+    std::shared_ptr<SimSvc::SimSvcProxy<>> simProxy =
+            CommonAPI::Runtime::get()->buildProxy<SimSvc::SimSvcProxy>("local", "telephony.SimSvc",
                                                                        "SimSvcTest");
-    while (!simProxy->isAvailable()) {
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
-    }
     return simProxy;
 }
 
-std::shared_ptr<RadioSvcProxy<>> ProxySvcBuilder::getRadioSvcProxy() {
-    auto radioProxy = CommonAPI::Runtime::get()->buildProxy<RadioSvcProxy>(
-            "local", "modem.RadioSvc", "radioSvcTest");
-    while (!radioProxy->isAvailable()) {
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
-    }
+std::shared_ptr<RadioSvc::RadioSvcProxy<>> ProxySvcBuilder::getRadioSvcProxy() {
+    std::shared_ptr<RadioSvc::RadioSvcProxy<>> radioProxy =
+            CommonAPI::Runtime::get()->buildProxy<RadioSvc::RadioSvcProxy>(
+                    "local", "telephony.RadioSvc", "radioSvcTest");
     return radioProxy;
 }
 
-std::shared_ptr<InfoSvcProxy<>> ProxySvcBuilder::getInfoSvcProxy() {
-    auto infoProxy = CommonAPI::Runtime::get()->buildProxy<InfoSvcProxy>("local", "modem.InfoSvc",
+std::shared_ptr<InfoSvc::InfoSvcProxy<>> ProxySvcBuilder::getInfoSvcProxy() {
+    std::shared_ptr<InfoSvc::InfoSvcProxy<>> infoProxy =
+            CommonAPI::Runtime::get()->buildProxy<InfoSvc::InfoSvcProxy>("local", "telephony.InfoSvc",
                                                                          "InfoSvcTest");
-    while (!infoProxy->isAvailable()) {
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
-    }
     return infoProxy;
 }
 
-std::shared_ptr<MngdConnSvcProxy<>> ProxySvcBuilder::getMngdConnProxy() {
-    auto mngdProxy = CommonAPI::Runtime::get()->buildProxy<MngdConnSvcProxy>(
-            "local", "modem.MngdConnSvc", "MngdConnSvcTest");
-    while (!mngdProxy->isAvailable()) {
-        std::this_thread::sleep_for(std::chrono::microseconds(10));
-    }
+std::shared_ptr<MngdConnSvc::MngdConnSvcProxy<>> ProxySvcBuilder::getMngdConnProxy() {
+    std::shared_ptr<MngdConnSvc::MngdConnSvcProxy<>> mngdProxy =
+            CommonAPI::Runtime::get()->buildProxy<MngdConnSvc::MngdConnSvcProxy>(
+                    "local", "telephony.MngdConnSvc", "MngdConnSvcTest");
     return mngdProxy;
 }
