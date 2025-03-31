@@ -7,8 +7,8 @@
  * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  */
-#include <RadioSvc/v2/com/qualcomm/qti/telephony/RadioSvcSomeIPStubAdapter.hpp>
-#include <RadioSvc/v2/com/qualcomm/qti/telephony/RadioSvc.hpp>
+#include <MngdConnSvc/v3/com/qualcomm/qti/telephony/MngdConnSvcSomeIPStubAdapter.hpp>
+#include <MngdConnSvc/v3/com/qualcomm/qti/telephony/MngdConnSvc.hpp>
 
 #if !defined (COMMONAPI_INTERNAL_COMPILATION)
 #define COMMONAPI_INTERNAL_COMPILATION
@@ -22,34 +22,34 @@
 #undef HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
-namespace v2 {
+namespace v3 {
 namespace com {
 namespace qualcomm {
 namespace qti {
 namespace telephony {
 
-std::shared_ptr<CommonAPI::SomeIP::StubAdapter> createRadioSvcSomeIPStubAdapter(
+std::shared_ptr<CommonAPI::SomeIP::StubAdapter> createMngdConnSvcSomeIPStubAdapter(
                    const CommonAPI::SomeIP::Address &_address,
                    const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection,
                    const std::shared_ptr<CommonAPI::StubBase> &_stub) {
-    return std::make_shared< RadioSvcSomeIPStubAdapter<::v2::com::qualcomm::qti::telephony::RadioSvcStub>>(_address, _connection, _stub);
+    return std::make_shared< MngdConnSvcSomeIPStubAdapter<::v3::com::qualcomm::qti::telephony::MngdConnSvcStub>>(_address, _connection, _stub);
 }
 
-void initializeRadioSvcSomeIPStubAdapter() {
+void initializeMngdConnSvcSomeIPStubAdapter() {
     CommonAPI::SomeIP::AddressTranslator::get()->insert(
-        "local:com.qualcomm.qti.telephony.RadioSvc:v2_1:telephony.RadioSvc",
-         0xed80, 0x1, 2, 1);
+        "local:com.qualcomm.qti.telephony.MngdConnSvc:v3_0:telephony.MngdConnSvc",
+         0xed83, 0x1, 3, 0);
     CommonAPI::SomeIP::Factory::get()->registerStubAdapterCreateMethod(
-        "com.qualcomm.qti.telephony.RadioSvc:v2_1",
-        &createRadioSvcSomeIPStubAdapter);
+        "com.qualcomm.qti.telephony.MngdConnSvc:v3_0",
+        &createMngdConnSvcSomeIPStubAdapter);
 }
 
-INITIALIZER(registerRadioSvcSomeIPStubAdapter) {
-    CommonAPI::SomeIP::Factory::get()->registerInterface(initializeRadioSvcSomeIPStubAdapter);
+INITIALIZER(registerMngdConnSvcSomeIPStubAdapter) {
+    CommonAPI::SomeIP::Factory::get()->registerInterface(initializeMngdConnSvcSomeIPStubAdapter);
 }
 
 } // namespace telephony
 } // namespace qti
 } // namespace qualcomm
 } // namespace com
-} // namespace v2
+} // namespace v3

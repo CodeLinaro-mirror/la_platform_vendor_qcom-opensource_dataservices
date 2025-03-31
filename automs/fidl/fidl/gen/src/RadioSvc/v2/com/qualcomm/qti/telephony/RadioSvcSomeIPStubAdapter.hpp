@@ -56,6 +56,8 @@ public:
 
     void fireCellInfoEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioCellInfoStatusT &_status);
 
+    void fireRadioRatEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT &_radioRat);
+
     void deactivateManagedInstances() {}
 
     CommonAPI::SomeIP::GetAttributeStubDispatcher<
@@ -167,6 +169,14 @@ public:
         std::tuple< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioNetRegStateTDeployment_t, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t>
     > getPacketSwitchedStateStubDispatcher;
 
+    CommonAPI::SomeIP::MethodWithReplyStubDispatcher<
+        ::v2::com::qualcomm::qti::telephony::RadioSvcStub,
+        std::tuple< RadioSvcTypes::PhoneIdT>,
+        std::tuple< RadioSvcTypes::RadioStateT, RadioSvcTypes::TelephonyResultT>,
+        std::tuple< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t>,
+        std::tuple< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioStateTDeployment_t, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t>
+    > getRadioStateStubDispatcher;
+
     RadioSvcSomeIPStubAdapterInternal(
         const CommonAPI::SomeIP::Address &_address,
         const std::shared_ptr<CommonAPI::SomeIP::ProxyConnection> &_connection,
@@ -180,7 +190,7 @@ public:
         getGsmSignalMetricsStubDispatcher(
             &RadioSvcStub::GetGsmSignalMetrics,
             false,
-            _stub->hasElement(3),
+            _stub->hasElement(4),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -188,7 +198,7 @@ public:
         getUmtsSignalMetricsStubDispatcher(
             &RadioSvcStub::GetUmtsSignalMetrics,
             false,
-            _stub->hasElement(4),
+            _stub->hasElement(5),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -196,7 +206,7 @@ public:
         getLteSignalMetricsStubDispatcher(
             &RadioSvcStub::GetLteSignalMetrics,
             false,
-            _stub->hasElement(5),
+            _stub->hasElement(6),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -204,7 +214,7 @@ public:
         getNr5gSignalMetricsStubDispatcher(
             &RadioSvcStub::GetNr5gSignalMetrics,
             false,
-            _stub->hasElement(6),
+            _stub->hasElement(7),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<int32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -212,7 +222,7 @@ public:
         getRegisterModeStubDispatcher(
             &RadioSvcStub::GetRegisterMode,
             false,
-            _stub->hasElement(7),
+            _stub->hasElement(8),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::EmptyDeployment* >(nullptr), static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -220,7 +230,7 @@ public:
         setAutomaticRegisterModeStubDispatcher(
             &RadioSvcStub::SetAutomaticRegisterMode,
             false,
-            _stub->hasElement(8),
+            _stub->hasElement(9),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -228,7 +238,7 @@ public:
         getHardwareConfigStubDispatcher(
             &RadioSvcStub::GetHardwareConfig,
             false,
-            _stub->hasElement(9),
+            _stub->hasElement(10),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint8_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -236,7 +246,7 @@ public:
         getRatPreferencesStubDispatcher(
             &RadioSvcStub::GetRatPreferences,
             false,
-            _stub->hasElement(10),
+            _stub->hasElement(11),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -244,7 +254,7 @@ public:
         getCurrentNetworkNameStubDispatcher(
             &RadioSvcStub::GetCurrentNetworkName,
             false,
-            _stub->hasElement(11),
+            _stub->hasElement(12),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -252,7 +262,7 @@ public:
         getNetRegStateStubDispatcher(
             &RadioSvcStub::GetNetRegState,
             false,
-            _stub->hasElement(12),
+            _stub->hasElement(13),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t* >(nullptr), static_cast< CommonAPI::SomeIP::IntegerDeployment<uint32_t>* >(nullptr), static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< CommonAPI::SomeIP::StringDeployment* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioNetRegStateTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -260,7 +270,7 @@ public:
         getNrDualConnectivityStatusStubDispatcher(
             &RadioSvcStub::GetNrDualConnectivityStatus,
             false,
-            _stub->hasElement(13),
+            _stub->hasElement(14),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioNrDcnrRestrictionTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -268,7 +278,7 @@ public:
         setSignalStrengthReportingCriteriaStubDispatcher(
             &RadioSvcStub::SetSignalStrengthReportingCriteria,
             false,
-            _stub->hasElement(14),
+            _stub->hasElement(15),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioSigTypeTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioSigStrengthIndicationTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioSigStrengthHysteresisTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
@@ -276,9 +286,17 @@ public:
         getPacketSwitchedStateStubDispatcher(
             &RadioSvcStub::GetPacketSwitchedState,
             false,
-            _stub->hasElement(15),
+            _stub->hasElement(16),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
             std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioNetRegStateTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
+
+        ,
+        getRadioStateStubDispatcher(
+            &RadioSvcStub::GetRadioState,
+            false,
+            _stub->hasElement(17),
+            std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr)),
+            std::make_tuple(static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioStateTDeployment_t* >(nullptr), static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::TelephonyResultTDeployment_t* >(nullptr)))
 
     {
         RadioSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x12d) }, &getGsmSignalMetricsStubDispatcher );
@@ -294,6 +312,7 @@ public:
         RadioSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x137) }, &getNrDualConnectivityStatusStubDispatcher );
         RadioSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x138) }, &setSignalStrengthReportingCriteriaStubDispatcher );
         RadioSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x139) }, &getPacketSwitchedStateStubDispatcher );
+        RadioSvcSomeIPStubAdapterHelper::addStubDispatcher( { CommonAPI::SomeIP::method_id_t(0x13a) }, &getRadioStateStubDispatcher );
         // Provided events/fields
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
@@ -302,13 +321,18 @@ public:
         }
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
-            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x812e));
+            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x812d));
             CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x812e), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
         }
         {
             std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
-            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x812f));
+            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x812d));
             CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x812f), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
+        }
+        {
+            std::set<CommonAPI::SomeIP::eventgroup_id_t> itsEventGroups;
+            itsEventGroups.insert(CommonAPI::SomeIP::eventgroup_id_t(0x812d));
+            CommonAPI::SomeIP::StubAdapter::registerEvent(CommonAPI::SomeIP::event_id_t(0x8130), itsEventGroups, CommonAPI::SomeIP::event_type_e::ET_EVENT, CommonAPI::SomeIP::reliability_type_e::RT_UNRELIABLE);
         }
     }
 
@@ -375,6 +399,25 @@ void RadioSvcSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireCellInfoEvent(cons
              deployed_valueState
             ,  deployed_phoneId
             ,  deployed_status
+    );
+}
+
+template <typename _Stub, typename... _Stubs>
+void RadioSvcSomeIPStubAdapterInternal<_Stub, _Stubs...>::fireRadioRatEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT &_radioRat) {
+    CommonAPI::Deployable< RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t> deployed_valueState(_valueState, static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t* >(nullptr));
+    CommonAPI::Deployable< RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t> deployed_phoneId(_phoneId, static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t* >(nullptr));
+    CommonAPI::Deployable< RadioSvcTypes::RadioRatT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t> deployed_radioRat(_radioRat, static_cast< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t* >(nullptr));
+    CommonAPI::SomeIP::StubEventHelper<CommonAPI::SomeIP::SerializableArguments<  CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t >
+    ,  CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t >
+    ,  CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t >
+    >>
+        ::sendEvent(
+            *this,
+            CommonAPI::SomeIP::event_id_t(0x8130),
+            false,
+             deployed_valueState
+            ,  deployed_phoneId
+            ,  deployed_radioRat
     );
 }
 

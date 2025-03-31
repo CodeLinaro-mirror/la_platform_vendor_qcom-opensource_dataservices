@@ -7,8 +7,8 @@
 * If a copy of the MPL was not distributed with this file, You can obtain one at
 * http://mozilla.org/MPL/2.0/.
 */
-#ifndef V1_COM_QUALCOMM_QTI_TELEPHONY_Sim_Svc_Types_HPP_
-#define V1_COM_QUALCOMM_QTI_TELEPHONY_Sim_Svc_Types_HPP_
+#ifndef V3_COM_QUALCOMM_QTI_TELEPHONY_Mngd_Conn_Svc_Types_HPP_
+#define V3_COM_QUALCOMM_QTI_TELEPHONY_Mngd_Conn_Svc_Types_HPP_
 
 
 
@@ -17,73 +17,27 @@
 #define HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
+#include <CommonAPI/Deployment.hpp>
 #include <CommonAPI/InputStream.hpp>
 #include <CommonAPI/OutputStream.hpp>
+#include <CommonAPI/Struct.hpp>
 #include <CommonAPI/Types.hpp>
 #include <cstdint>
+#include <string>
 
 #if defined (HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE)
 #undef COMMONAPI_INTERNAL_COMPILATION
 #undef HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
-namespace v1 {
+namespace v3 {
 namespace com {
 namespace qualcomm {
 namespace qti {
 namespace telephony {
 
-struct SimSvcTypes {
-    
-    struct PhoneIdT : CommonAPI::Enumeration< uint8_t> {
-        enum Literal : uint8_t {
-            PHONE_ID_T_UNKNOWN = 0,
-            PHONE_ID_T_1 = 1,
-            PHONE_ID_T_2 = 2
-        };
-    
-        PhoneIdT()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::PHONE_ID_T_UNKNOWN)) {}
-        PhoneIdT(Literal _literal)
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
-    
-        inline bool validate() const {
-            switch (value_) {
-                case static_cast< uint8_t>(Literal::PHONE_ID_T_UNKNOWN):
-                case static_cast< uint8_t>(Literal::PHONE_ID_T_1):
-                case static_cast< uint8_t>(Literal::PHONE_ID_T_2):
-                return true;
-            default:
-                return false;
-            }
-        }
-    
-        inline bool operator==(const PhoneIdT &_other) const { return (value_ == _other.value_); }
-        inline bool operator!=(const PhoneIdT &_other) const { return (value_ != _other.value_); }
-        inline bool operator<=(const PhoneIdT &_other) const { return (value_ <= _other.value_); }
-        inline bool operator>=(const PhoneIdT &_other) const { return (value_ >= _other.value_); }
-        inline bool operator<(const PhoneIdT &_other) const { return (value_ < _other.value_); }
-        inline bool operator>(const PhoneIdT &_other) const { return (value_ > _other.value_); }
-    
-        inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
-        inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
-        inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
-        inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
-        inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
-        inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
-    
-        const char* toString() const noexcept
-        {
-            switch(value_)
-            {
-            case static_cast< uint8_t>(Literal::PHONE_ID_T_UNKNOWN): return "PHONE_ID_T_UNKNOWN";
-            case static_cast< uint8_t>(Literal::PHONE_ID_T_1): return "PHONE_ID_T_1";
-            case static_cast< uint8_t>(Literal::PHONE_ID_T_2): return "PHONE_ID_T_2";
-            default: return "UNDEFINED";
-            }
-        }
-    };
-    
+struct MngdConnSvcTypes {
+
     struct TelephonyResultT : CommonAPI::Enumeration< uint8_t> {
         enum Literal : uint8_t {
             TELEPHONY_RESULT_T_UNKNOWN = 0,
@@ -113,12 +67,12 @@ struct SimSvcTypes {
             TELEPHONY_RESULT_T_SUSPENDED = 24,
             TELEPHONY_RESULT_T_NOT_POSSIBLE = 25
         };
-    
+
         TelephonyResultT()
             : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_UNKNOWN)) {}
         TelephonyResultT(Literal _literal)
             : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
-    
+
         inline bool validate() const {
             switch (value_) {
                 case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_UNKNOWN):
@@ -152,21 +106,21 @@ struct SimSvcTypes {
                 return false;
             }
         }
-    
+
         inline bool operator==(const TelephonyResultT &_other) const { return (value_ == _other.value_); }
         inline bool operator!=(const TelephonyResultT &_other) const { return (value_ != _other.value_); }
         inline bool operator<=(const TelephonyResultT &_other) const { return (value_ <= _other.value_); }
         inline bool operator>=(const TelephonyResultT &_other) const { return (value_ >= _other.value_); }
         inline bool operator<(const TelephonyResultT &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const TelephonyResultT &_other) const { return (value_ > _other.value_); }
-    
+
         inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
         inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
         inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
         inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
         inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
         inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
-    
+
         const char* toString() const noexcept
         {
             switch(value_)
@@ -201,77 +155,74 @@ struct SimSvcTypes {
             }
         }
     };
-    
-    struct SimStateT : CommonAPI::Enumeration< uint8_t> {
+
+    struct MngdConnDataStateT : CommonAPI::Enumeration< uint8_t> {
         enum Literal : uint8_t {
-            SIM_STATE_T_UNKNOWN = 0,
-            SIM_STATE_T_PRESENT = 1,
-            SIM_STATE_T_ABSENT = 2,
-            SIM_STATE_T_READY = 3,
-            SIM_STATE_T_RESTRICTED = 4,
-            SIM_STATE_T_ERROR = 5
+            MNGD_CONN_T_DATA_UNKNOWN = 0,
+            MNGD_CONN_T_DATA_DISCONNECTED = 1,
+            MNGD_CONN_T_DATA_CONNECTED = 2,
+            MNGD_CONN_T_DATA_CONNECTION_FAILED = 3,
+            MNGD_CONN_T_DATA_CONNECTION_STALLED = 4
         };
-    
-        SimStateT()
-            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::SIM_STATE_T_UNKNOWN)) {}
-        SimStateT(Literal _literal)
+
+        MngdConnDataStateT()
+            : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_UNKNOWN)) {}
+        MngdConnDataStateT(Literal _literal)
             : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
-    
+
         inline bool validate() const {
             switch (value_) {
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_UNKNOWN):
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_PRESENT):
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_ABSENT):
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_READY):
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_RESTRICTED):
-                case static_cast< uint8_t>(Literal::SIM_STATE_T_ERROR):
+                case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_UNKNOWN):
+                case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_DISCONNECTED):
+                case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTED):
+                case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTION_FAILED):
+                case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTION_STALLED):
                 return true;
             default:
                 return false;
             }
         }
-    
-        inline bool operator==(const SimStateT &_other) const { return (value_ == _other.value_); }
-        inline bool operator!=(const SimStateT &_other) const { return (value_ != _other.value_); }
-        inline bool operator<=(const SimStateT &_other) const { return (value_ <= _other.value_); }
-        inline bool operator>=(const SimStateT &_other) const { return (value_ >= _other.value_); }
-        inline bool operator<(const SimStateT &_other) const { return (value_ < _other.value_); }
-        inline bool operator>(const SimStateT &_other) const { return (value_ > _other.value_); }
-    
+
+        inline bool operator==(const MngdConnDataStateT &_other) const { return (value_ == _other.value_); }
+        inline bool operator!=(const MngdConnDataStateT &_other) const { return (value_ != _other.value_); }
+        inline bool operator<=(const MngdConnDataStateT &_other) const { return (value_ <= _other.value_); }
+        inline bool operator>=(const MngdConnDataStateT &_other) const { return (value_ >= _other.value_); }
+        inline bool operator<(const MngdConnDataStateT &_other) const { return (value_ < _other.value_); }
+        inline bool operator>(const MngdConnDataStateT &_other) const { return (value_ > _other.value_); }
+
         inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
         inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
         inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
         inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
         inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
         inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
-    
+
         const char* toString() const noexcept
         {
             switch(value_)
             {
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_UNKNOWN): return "SIM_STATE_T_UNKNOWN";
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_PRESENT): return "SIM_STATE_T_PRESENT";
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_ABSENT): return "SIM_STATE_T_ABSENT";
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_READY): return "SIM_STATE_T_READY";
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_RESTRICTED): return "SIM_STATE_T_RESTRICTED";
-            case static_cast< uint8_t>(Literal::SIM_STATE_T_ERROR): return "SIM_STATE_T_ERROR";
+            case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_UNKNOWN): return "MNGD_CONN_T_DATA_UNKNOWN";
+            case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_DISCONNECTED): return "MNGD_CONN_T_DATA_DISCONNECTED";
+            case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTED): return "MNGD_CONN_T_DATA_CONNECTED";
+            case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTION_FAILED): return "MNGD_CONN_T_DATA_CONNECTION_FAILED";
+            case static_cast< uint8_t>(Literal::MNGD_CONN_T_DATA_CONNECTION_STALLED): return "MNGD_CONN_T_DATA_CONNECTION_STALLED";
             default: return "UNDEFINED";
             }
         }
     };
-    
+
     struct ValueState : CommonAPI::Enumeration< uint8_t> {
         enum Literal : uint8_t {
             VALUE_STATE_UNAVAILABLE = 0,
             VALUE_STATE_VALID = 1,
             VALUE_STATE_INVALID = 2
         };
-    
+
         ValueState()
             : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(Literal::VALUE_STATE_UNAVAILABLE)) {}
         ValueState(Literal _literal)
             : CommonAPI::Enumeration< uint8_t>(static_cast< uint8_t>(_literal)) {}
-    
+
         inline bool validate() const {
             switch (value_) {
                 case static_cast< uint8_t>(Literal::VALUE_STATE_UNAVAILABLE):
@@ -282,21 +233,21 @@ struct SimSvcTypes {
                 return false;
             }
         }
-    
+
         inline bool operator==(const ValueState &_other) const { return (value_ == _other.value_); }
         inline bool operator!=(const ValueState &_other) const { return (value_ != _other.value_); }
         inline bool operator<=(const ValueState &_other) const { return (value_ <= _other.value_); }
         inline bool operator>=(const ValueState &_other) const { return (value_ >= _other.value_); }
         inline bool operator<(const ValueState &_other) const { return (value_ < _other.value_); }
         inline bool operator>(const ValueState &_other) const { return (value_ > _other.value_); }
-    
+
         inline bool operator==(const Literal &_value) const { return (value_ == static_cast< uint8_t>(_value)); }
         inline bool operator!=(const Literal &_value) const { return (value_ != static_cast< uint8_t>(_value)); }
         inline bool operator<=(const Literal &_value) const { return (value_ <= static_cast< uint8_t>(_value)); }
         inline bool operator>=(const Literal &_value) const { return (value_ >= static_cast< uint8_t>(_value)); }
         inline bool operator<(const Literal &_value) const { return (value_ < static_cast< uint8_t>(_value)); }
         inline bool operator>(const Literal &_value) const { return (value_ > static_cast< uint8_t>(_value)); }
-    
+
         const char* toString() const noexcept
         {
             switch(value_)
@@ -308,55 +259,88 @@ struct SimSvcTypes {
             }
         }
     };
+    struct MngdConnDataIpInfoT : CommonAPI::Struct< std::string, std::string, std::string, std::string, uint32_t, uint16_t> {
+
+        MngdConnDataIpInfoT()
+        {
+            std::get< 0>(values_) = "";
+            std::get< 1>(values_) = "";
+            std::get< 2>(values_) = "";
+            std::get< 3>(values_) = "";
+            std::get< 4>(values_) = 0ul;
+            std::get< 5>(values_) = 0u;
+        }
+        MngdConnDataIpInfoT(const std::string &_ipAddr, const std::string &_gatewayAddr, const std::string &_dns1Addr, const std::string &_dns2Addr, const uint32_t &_ipMask, const uint16_t &_mtu)
+        {
+            std::get< 0>(values_) = _ipAddr;
+            std::get< 1>(values_) = _gatewayAddr;
+            std::get< 2>(values_) = _dns1Addr;
+            std::get< 3>(values_) = _dns2Addr;
+            std::get< 4>(values_) = _ipMask;
+            std::get< 5>(values_) = _mtu;
+        }
+        inline const std::string &getIpAddr() const { return std::get< 0>(values_); }
+        inline void setIpAddr(const std::string &_value) { std::get< 0>(values_) = _value; }
+        inline const std::string &getGatewayAddr() const { return std::get< 1>(values_); }
+        inline void setGatewayAddr(const std::string &_value) { std::get< 1>(values_) = _value; }
+        inline const std::string &getDns1Addr() const { return std::get< 2>(values_); }
+        inline void setDns1Addr(const std::string &_value) { std::get< 2>(values_) = _value; }
+        inline const std::string &getDns2Addr() const { return std::get< 3>(values_); }
+        inline void setDns2Addr(const std::string &_value) { std::get< 3>(values_) = _value; }
+        inline const uint32_t &getIpMask() const { return std::get< 4>(values_); }
+        inline void setIpMask(const uint32_t &_value) { std::get< 4>(values_) = _value; }
+        inline const uint16_t &getMtu() const { return std::get< 5>(values_); }
+        inline void setMtu(const uint16_t &_value) { std::get< 5>(values_) = _value; }
+        inline bool operator==(const MngdConnDataIpInfoT& _other) const {
+        return (getIpAddr() == _other.getIpAddr() && getGatewayAddr() == _other.getGatewayAddr() && getDns1Addr() == _other.getDns1Addr() && getDns2Addr() == _other.getDns2Addr() && getIpMask() == _other.getIpMask() && getMtu() == _other.getMtu());
+        }
+        inline bool operator!=(const MngdConnDataIpInfoT &_other) const {
+            return !((*this) == _other);
+        }
+
+    };
 
 
 static inline const char* getTypeCollectionName() {
-    static const char* typeCollectionName = "com.qualcomm.qti.telephony.SimSvcTypes";
+    static const char* typeCollectionName = "com.qualcomm.qti.telephony.MngdConnSvcTypes";
     return typeCollectionName;
 }
 
 inline CommonAPI::Version getTypeCollectionVersion() {
-    return CommonAPI::Version(1, 0);
+    return CommonAPI::Version(3, 0);
 }
 
-}; // struct SimSvcTypes
+}; // struct MngdConnSvcTypes
 
 } // namespace telephony
 } // namespace qti
 } // namespace qualcomm
 } // namespace com
-} // namespace v1
+} // namespace v3
 
 namespace CommonAPI {
 }
 
 
 namespace std {
-    //Hash for PhoneIdT
-    template<>
-    struct hash< ::v1::com::qualcomm::qti::telephony::SimSvcTypes::PhoneIdT> {
-        inline size_t operator()(const ::v1::com::qualcomm::qti::telephony::SimSvcTypes::PhoneIdT& phoneIdT) const {
-            return static_cast< uint8_t>(phoneIdT);
-        }
-    };
     //Hash for TelephonyResultT
     template<>
-    struct hash< ::v1::com::qualcomm::qti::telephony::SimSvcTypes::TelephonyResultT> {
-        inline size_t operator()(const ::v1::com::qualcomm::qti::telephony::SimSvcTypes::TelephonyResultT& telephonyResultT) const {
+    struct hash< ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::TelephonyResultT> {
+        inline size_t operator()(const ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::TelephonyResultT& telephonyResultT) const {
             return static_cast< uint8_t>(telephonyResultT);
         }
     };
-    //Hash for SimStateT
+    //Hash for MngdConnDataStateT
     template<>
-    struct hash< ::v1::com::qualcomm::qti::telephony::SimSvcTypes::SimStateT> {
-        inline size_t operator()(const ::v1::com::qualcomm::qti::telephony::SimSvcTypes::SimStateT& simStateT) const {
-            return static_cast< uint8_t>(simStateT);
+    struct hash< ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::MngdConnDataStateT> {
+        inline size_t operator()(const ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::MngdConnDataStateT& mngdConnDataStateT) const {
+            return static_cast< uint8_t>(mngdConnDataStateT);
         }
     };
     //Hash for ValueState
     template<>
-    struct hash< ::v1::com::qualcomm::qti::telephony::SimSvcTypes::ValueState> {
-        inline size_t operator()(const ::v1::com::qualcomm::qti::telephony::SimSvcTypes::ValueState& valueState) const {
+    struct hash< ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::ValueState> {
+        inline size_t operator()(const ::v3::com::qualcomm::qti::telephony::MngdConnSvcTypes::ValueState& valueState) const {
             return static_cast< uint8_t>(valueState);
         }
     };
@@ -364,6 +348,6 @@ namespace std {
 
 
 // Compatibility
-namespace v1_0 = v1;
+namespace v3_0 = v3;
 
-#endif // V1_COM_QUALCOMM_QTI_TELEPHONY_Sim_Svc_Types_HPP_
+#endif // V3_COM_QUALCOMM_QTI_TELEPHONY_Mngd_Conn_Svc_Types_HPP_
