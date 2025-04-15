@@ -64,6 +64,8 @@ public:
 
     virtual CellInfoEvent& getCellInfoEvent();
 
+    virtual RadioRatEvent& getRadioRatEvent();
+
     virtual void GetGsmSignalMetrics(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, int32_t &_rssi, uint32_t &_ber, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info);
 
     virtual std::future<CommonAPI::CallStatus> GetGsmSignalMetricsAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetGsmSignalMetricsAsyncCallback _callback, const CommonAPI::CallInfo *_info);
@@ -116,6 +118,10 @@ public:
 
     virtual std::future<CommonAPI::CallStatus> GetPacketSwitchedStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetPacketSwitchedStateAsyncCallback _callback, const CommonAPI::CallInfo *_info);
 
+    virtual void GetRadioState(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, RadioSvcTypes::RadioStateT &_radioState, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info);
+
+    virtual std::future<CommonAPI::CallStatus> GetRadioStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetRadioStateAsyncCallback _callback, const CommonAPI::CallInfo *_info);
+
     virtual void getOwnVersion(uint16_t &_major, uint16_t &_minor) const;
 
     virtual std::future<void> getCompletionFuture();
@@ -124,6 +130,7 @@ private:
     CommonAPI::SomeIP::Event<SignalStrengthEvent, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t >, CommonAPI::Deployable< int32_t, CommonAPI::SomeIP::IntegerDeployment<int32_t> >, CommonAPI::Deployable< int32_t, CommonAPI::SomeIP::IntegerDeployment<int32_t> >> signalStrength_;
     CommonAPI::SomeIP::Event<RadioStateEvent, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioStateT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioStateTDeployment_t >> radioState_;
     CommonAPI::SomeIP::Event<CellInfoEvent, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioCellInfoStatusT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioCellInfoStatusTDeployment_t >> cellInfo_;
+    CommonAPI::SomeIP::Event<RadioRatEvent, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::ValueStateDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::PhoneIdTDeployment_t >, CommonAPI::Deployable< ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes_::RadioRatTDeployment_t >> radioRat_;
 
     std::promise<void> completed_;
 };
