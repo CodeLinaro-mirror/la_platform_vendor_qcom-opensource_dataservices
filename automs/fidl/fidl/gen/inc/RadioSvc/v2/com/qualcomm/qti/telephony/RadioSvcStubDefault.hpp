@@ -96,6 +96,18 @@ public:
         }
         RadioSvcStub::fireCellInfoEvent(_valueState, _phoneId, _status);
     }
+    COMMONAPI_EXPORT virtual void fireRadioRatEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT &_radioRat) {
+        if (!_valueState.validate()) {
+            return;
+        }
+        if (!_phoneId.validate()) {
+            return;
+        }
+        if (!_radioRat.validate()) {
+            return;
+        }
+        RadioSvcStub::fireRadioRatEvent(_valueState, _phoneId, _radioRat);
+    }
     COMMONAPI_EXPORT virtual void GetGsmSignalMetrics(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, GetGsmSignalMetricsReply_t _reply) {
         (void)_client;
         (void)_phoneId;
@@ -257,6 +269,19 @@ public:
         }
         _reply(netReg, result);
     }
+    COMMONAPI_EXPORT virtual void GetRadioState(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, GetRadioStateReply_t _reply) {
+        (void)_client;
+        (void)_phoneId;
+        RadioSvcTypes::RadioStateT radioState = RadioSvcTypes::RadioStateT::RADIO_STATE_T_UNKNOWN;
+        RadioSvcTypes::TelephonyResultT result = RadioSvcTypes::TelephonyResultT::TELEPHONY_RESULT_T_UNKNOWN;
+        if (!radioState.validate()) {
+            return;
+        }
+        if (!result.validate()) {
+            return;
+        }
+        _reply(radioState, result);
+    }
 
 
 protected:
@@ -288,6 +313,6 @@ private:
 
 
 // Compatibility
-namespace v2_0 = v2;
+namespace v2_1 = v2;
 
 #endif // V2_COM_QUALCOMM_QTI_TELEPHONY_Radio_Svc_STUB_DEFAULT

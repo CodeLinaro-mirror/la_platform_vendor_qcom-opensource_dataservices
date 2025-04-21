@@ -20,7 +20,7 @@ automs_cc_defaults {
                 "./fidl/gen/src/SimSvc/v1/com/qualcomm/qti/telephony/*.cpp",
                 "./fidl/gen/src/InfoSvc/v1/com/qualcomm/qti/telephony/*.cpp",
                 "./fidl/gen/src/RadioSvc/v2/com/qualcomm/qti/telephony/*.cpp",
-                "./fidl/gen/src/MngdConnSvc/v2/com/qualcomm/qti/telephony/*.cpp",
+                "./fidl/gen/src/MngdConnSvc/v3/com/qualcomm/qti/telephony/*.cpp",
                 "./src/*.cpp",
             ],
             cppflags: [
@@ -29,7 +29,8 @@ automs_cc_defaults {
                 "-Wno-attributes",
                 "-Wno-unused-variable",
                 "-Wno-unused-parameter",
-                "-Wno-overloaded-virtual"
+                "-Wno-overloaded-virtual",
+                "-Wno-missing-template-arg-list-after-template-kw"
             ],
             shared_libs: [
                 "libvsomeip",

@@ -7,30 +7,30 @@
 * If a copy of the MPL was not distributed with this file, You can obtain one at
 * http://mozilla.org/MPL/2.0/.
 */
-#ifndef V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_INSTANCE_HPP_
-#define V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_INSTANCE_HPP_
+#ifndef V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_INSTANCE_HPP_
+#define V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_INSTANCE_HPP_
 
 #include <string>
 
-namespace v2 {
+namespace v3 {
 namespace com {
 namespace qualcomm {
 namespace qti {
 namespace telephony {
 
-const char * const RadioSvc_telephony_RadioSvc = "telephony.RadioSvc";
+const char * const MngdConnSvc_telephony_MngdConnSvc = "telephony.MngdConnSvc";
 
-const std::string RadioSvc_INSTANCES[] = {
-    RadioSvc_telephony_RadioSvc
+const std::string MngdConnSvc_INSTANCES[] = {
+    MngdConnSvc_telephony_MngdConnSvc
 };
 
 } // namespace telephony
 } // namespace qti
 } // namespace qualcomm
 } // namespace com
-} // namespace v2
+} // namespace v3
 
 // Compatibility
-namespace v2_1 = v2;
+namespace v3_0 = v3;
 
-#endif // V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_INSTANCE_HPP_
+#endif // V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_INSTANCE_HPP_

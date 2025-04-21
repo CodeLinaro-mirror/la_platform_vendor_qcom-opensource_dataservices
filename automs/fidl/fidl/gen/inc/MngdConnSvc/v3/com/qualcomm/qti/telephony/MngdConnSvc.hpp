@@ -7,8 +7,8 @@
 * If a copy of the MPL was not distributed with this file, You can obtain one at
 * http://mozilla.org/MPL/2.0/.
 */
-#ifndef V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_HPP_
-#define V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_HPP_
+#ifndef V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_HPP_
+#define V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_HPP_
 
 
 
@@ -25,26 +25,26 @@
 #undef HAS_DEFINED_COMMONAPI_INTERNAL_COMPILATION_HERE
 #endif
 
-namespace v2 {
+namespace v3 {
 namespace com {
 namespace qualcomm {
 namespace qti {
 namespace telephony {
 
-class RadioSvc {
+class MngdConnSvc {
 public:
-    virtual ~RadioSvc() { }
+    virtual ~MngdConnSvc() { }
 
     static inline const char* getInterface();
     static inline CommonAPI::Version getInterfaceVersion();
 };
 
-const char* RadioSvc::getInterface() {
-    return ("com.qualcomm.qti.telephony.RadioSvc:v2_1");
+const char* MngdConnSvc::getInterface() {
+    return ("com.qualcomm.qti.telephony.MngdConnSvc:v3_0");
 }
 
-CommonAPI::Version RadioSvc::getInterfaceVersion() {
-    return CommonAPI::Version(2, 1);
+CommonAPI::Version MngdConnSvc::getInterfaceVersion() {
+    return CommonAPI::Version(3, 0);
 }
 
 
@@ -52,13 +52,13 @@ CommonAPI::Version RadioSvc::getInterfaceVersion() {
 } // namespace qti
 } // namespace qualcomm
 } // namespace com
-} // namespace v2
+} // namespace v3
 
 namespace CommonAPI {
 }
 
 
 // Compatibility
-namespace v2_1 = v2;
+namespace v3_0 = v3;
 
-#endif // V2_COM_QUALCOMM_QTI_TELEPHONY_RADIO_SVC_HPP_
+#endif // V3_COM_QUALCOMM_QTI_TELEPHONY_MNGD_CONN_SVC_HPP_
