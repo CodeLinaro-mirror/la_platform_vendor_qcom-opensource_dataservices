@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+* Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 * SPDX-License-Identifier: BSD-3-Clause-Clear
 */
 
@@ -87,6 +87,12 @@ define org.genivi.commonapi.someip.deployment for interface com.qualcomm.qti.tel
         SomeIpEventGroups = { 33071 }
     }
 
+    broadcast RadioRat
+    {
+        SomeIpEventID = 33072
+        SomeIpEventGroups = { 33072 }
+    }
+
     method GetGsmSignalMetrics
     {
         SomeIpMethodID = 301
@@ -150,6 +156,11 @@ define org.genivi.commonapi.someip.deployment for interface com.qualcomm.qti.tel
     method GetPacketSwitchedState
     {
         SomeIpMethodID = 313
+    }
+
+    method GetRadioState
+    {
+        SomeIpMethodID = 314
     }
 }
 

@@ -71,6 +71,11 @@ class RadioSvcStubAdapter
     * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
     */
     virtual void fireCellInfoEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioCellInfoStatusT &_status) = 0;
+    /**
+    * Sends a broadcast event for RadioRat. Should not be called directly.
+    * Instead, the "fire<broadcastName>Event" methods of the stub should be used.
+    */
+    virtual void fireRadioRatEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT &_radioRat) = 0;
 
 
     virtual void deactivateManagedInstances() = 0;
@@ -126,11 +131,12 @@ public:
     typedef std::function<void (RadioSvcTypes::RadioNrDcnrRestrictionT _statusDcnr, RadioSvcTypes::TelephonyResultT _result)> GetNrDualConnectivityStatusReply_t;
     typedef std::function<void (RadioSvcTypes::TelephonyResultT _result)> SetSignalStrengthReportingCriteriaReply_t;
     typedef std::function<void (RadioSvcTypes::RadioNetRegStateT _netReg, RadioSvcTypes::TelephonyResultT _result)> GetPacketSwitchedStateReply_t;
+    typedef std::function<void (RadioSvcTypes::RadioStateT _radioState, RadioSvcTypes::TelephonyResultT _result)> GetRadioStateReply_t;
 
     virtual ~RadioSvcStub() {}
     void lockInterfaceVersionAttribute(bool _lockAccess) { static_cast<void>(_lockAccess); }
     bool hasElement(const uint32_t _id) const {
-        return (_id < 16);
+        return (_id < 18);
     }
     virtual const CommonAPI::Version& getInterfaceVersion(std::shared_ptr<CommonAPI::ClientId> _client) = 0;
 
@@ -151,6 +157,12 @@ public:
         auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();
         if (stubAdapter)
             stubAdapter->fireCellInfoEvent(_valueState, _phoneId, _status);
+    }
+    /// Sends a broadcast event for RadioRat.
+    virtual void fireRadioRatEvent(const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState &_valueState, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT &_phoneId, const ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT &_radioRat) {
+        auto stubAdapter = CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::stubAdapter_.lock();
+        if (stubAdapter)
+            stubAdapter->fireRadioRatEvent(_valueState, _phoneId, _radioRat);
     }
     /// This is the method that will be called on remote calls on the method GetGsmSignalMetrics.
     virtual void GetGsmSignalMetrics(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, GetGsmSignalMetricsReply_t _reply) = 0;
@@ -178,6 +190,8 @@ public:
     virtual void SetSignalStrengthReportingCriteria(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, RadioSvcTypes::RadioSigTypeT _sigType, RadioSvcTypes::RadioSigStrengthIndicationT _ind, RadioSvcTypes::RadioSigStrengthHysteresisT _hyst, SetSignalStrengthReportingCriteriaReply_t _reply) = 0;
     /// This is the method that will be called on remote calls on the method GetPacketSwitchedState.
     virtual void GetPacketSwitchedState(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, GetPacketSwitchedStateReply_t _reply) = 0;
+    /// This is the method that will be called on remote calls on the method GetRadioState.
+    virtual void GetRadioState(const std::shared_ptr<CommonAPI::ClientId> _client, RadioSvcTypes::PhoneIdT _phoneId, GetRadioStateReply_t _reply) = 0;
 
 
     using CommonAPI::Stub<RadioSvcStubAdapter, RadioSvcStubRemoteEvent>::initStubAdapter;
@@ -195,6 +209,6 @@ public:
 
 
 // Compatibility
-namespace v2_0 = v2;
+namespace v2_1 = v2;
 
 #endif // V2_COM_QUALCOMM_QTI_TELEPHONY_Radio_Svc_STUB_HPP_
