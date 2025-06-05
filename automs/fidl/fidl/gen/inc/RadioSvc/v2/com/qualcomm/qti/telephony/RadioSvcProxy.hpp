@@ -90,6 +90,12 @@ public:
         return delegate_->getCellInfoEvent();
     }
     /**
+     * Returns the wrapper class that provides access to the broadcast RadioRat.
+     */
+    virtual RadioRatEvent& getRadioRatEvent() {
+        return delegate_->getRadioRatEvent();
+    }
+    /**
      * Calls GetGsmSignalMetrics with synchronous semantics.
      *
      * All const parameters are input parameters to this method.
@@ -362,6 +368,27 @@ public:
      * It will provide the same value for CallStatus as will be handed to the callback.
      */
     virtual std::future<CommonAPI::CallStatus> GetPacketSwitchedStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetPacketSwitchedStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls GetRadioState with synchronous semantics.
+     *
+     * All const parameters are input parameters to this method.
+     * All non-const parameters will be filled with the returned values.
+     * The CallStatus will be filled when the method returns and indicate either
+     * "SUCCESS" or which type of error has occurred. In case of an error, ONLY the CallStatus
+     * will be set.
+     */
+    virtual void GetRadioState(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, RadioSvcTypes::RadioStateT &_radioState, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info = nullptr);
+    /**
+     * Calls GetRadioState with asynchronous semantics.
+     *
+     * The provided callback will be called when the reply to this call arrives or
+     * an error occurs during the call. The CallStatus will indicate either "SUCCESS"
+     * or which type of error has occurred. In case of any error, ONLY the CallStatus
+     * will have a defined value.
+     * The std::future returned by this method will be fulfilled at arrival of the reply.
+     * It will provide the same value for CallStatus as will be handed to the callback.
+     */
+    virtual std::future<CommonAPI::CallStatus> GetRadioStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetRadioStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr);
 
 
 
@@ -685,6 +712,27 @@ std::future<CommonAPI::CallStatus> RadioSvcProxy<_AttributeExtensions...>::GetPa
     }
     return delegate_->GetPacketSwitchedStateAsync(_phoneId, _callback, _info);
 }
+template <typename ... _AttributeExtensions>
+void RadioSvcProxy<_AttributeExtensions...>::GetRadioState(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, RadioSvcTypes::RadioStateT &_radioState, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info) {
+    if (!_phoneId.validate()) {
+        _internalCallStatus = CommonAPI::CallStatus::INVALID_VALUE;
+        return;
+    }
+    delegate_->GetRadioState(_phoneId, _internalCallStatus, _radioState, _result, _info);
+}
+
+template <typename ... _AttributeExtensions>
+std::future<CommonAPI::CallStatus> RadioSvcProxy<_AttributeExtensions...>::GetRadioStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetRadioStateAsyncCallback _callback, const CommonAPI::CallInfo *_info) {
+    if (!_phoneId.validate()) {
+        RadioSvcTypes::RadioStateT radioState = RadioSvcTypes::RadioStateT::RADIO_STATE_T_UNKNOWN;
+        RadioSvcTypes::TelephonyResultT result = RadioSvcTypes::TelephonyResultT::TELEPHONY_RESULT_T_UNKNOWN;
+        _callback(CommonAPI::CallStatus::INVALID_VALUE, radioState, result);
+        std::promise<CommonAPI::CallStatus> promise;
+        promise.set_value(CommonAPI::CallStatus::INVALID_VALUE);
+        return promise.get_future();
+    }
+    return delegate_->GetRadioStateAsync(_phoneId, _callback, _info);
+}
 
 template <typename ... _AttributeExtensions>
 const CommonAPI::Address &RadioSvcProxy<_AttributeExtensions...>::getAddress() const {
@@ -726,6 +774,6 @@ std::future<void> RadioSvcProxy<_AttributeExtensions...>::getCompletionFuture() 
 
 
 // Compatibility
-namespace v2_0 = v2;
+namespace v2_1 = v2;
 
 #endif // V2_COM_QUALCOMM_QTI_TELEPHONY_Radio_Svc_PROXY_HPP_
