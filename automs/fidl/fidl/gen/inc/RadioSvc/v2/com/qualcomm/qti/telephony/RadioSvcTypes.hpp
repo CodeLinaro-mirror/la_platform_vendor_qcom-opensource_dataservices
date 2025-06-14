@@ -112,7 +112,8 @@ struct RadioSvcTypes {
             TELEPHONY_RESULT_T_UNAVAILABLE = 21,
             TELEPHONY_RESULT_T_TERMINATED = 22,
             TELEPHONY_RESULT_T_IN_PROGRESS = 23,
-            TELEPHONY_RESULT_T_SUSPENDED = 24
+            TELEPHONY_RESULT_T_SUSPENDED = 24,
+            TELEPHONY_RESULT_T_NOT_POSSIBLE = 25
         };
     
         TelephonyResultT()
@@ -147,6 +148,7 @@ struct RadioSvcTypes {
                 case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_TERMINATED):
                 case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_IN_PROGRESS):
                 case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_SUSPENDED):
+                case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_NOT_POSSIBLE):
                 return true;
             default:
                 return false;
@@ -196,6 +198,7 @@ struct RadioSvcTypes {
             case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_TERMINATED): return "TELEPHONY_RESULT_T_TERMINATED";
             case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_IN_PROGRESS): return "TELEPHONY_RESULT_T_IN_PROGRESS";
             case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_SUSPENDED): return "TELEPHONY_RESULT_T_SUSPENDED";
+            case static_cast< uint8_t>(Literal::TELEPHONY_RESULT_T_NOT_POSSIBLE): return "TELEPHONY_RESULT_T_NOT_POSSIBLE";
             default: return "UNDEFINED";
             }
         }
@@ -782,7 +785,7 @@ static inline const char* getTypeCollectionName() {
 }
 
 inline CommonAPI::Version getTypeCollectionVersion() {
-    return CommonAPI::Version(2, 0);
+    return CommonAPI::Version(2, 1);
 }
 
 }; // struct RadioSvcTypes
@@ -879,6 +882,6 @@ namespace std {
 
 
 // Compatibility
-namespace v2_0 = v2;
+namespace v2_1 = v2;
 
 #endif // V2_COM_QUALCOMM_QTI_TELEPHONY_Radio_Svc_Types_HPP_
