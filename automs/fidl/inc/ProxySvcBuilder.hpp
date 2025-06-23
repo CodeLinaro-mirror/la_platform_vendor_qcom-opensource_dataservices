@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+* Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
 * SPDX-License-Identifier: BSD-3-Clause-Clear
 */
 
@@ -9,13 +9,13 @@
 #include <CommonAPI/CommonAPI.hpp>
 #include <InfoSvc/v1/com/qualcomm/qti/telephony/InfoSvcProxy.hpp>
 #include <SimSvc/v1/com/qualcomm/qti/telephony/SimSvcProxy.hpp>
-#include <MngdConnSvc/v2/com/qualcomm/qti/telephony/MngdConnSvcProxy.hpp>
+#include <MngdConnSvc/v3/com/qualcomm/qti/telephony/MngdConnSvcProxy.hpp>
 #include <RadioSvc/v2/com/qualcomm/qti/telephony/RadioSvcProxy.hpp>
 
 namespace RadioSvc = v2::com::qualcomm::qti::telephony;
 namespace SimSvc = v1::com::qualcomm::qti::telephony;
 namespace InfoSvc = v1::com::qualcomm::qti::telephony;
-namespace MngdConnSvc = v2::com::qualcomm::qti::telephony;
+namespace MngdConnSvc = v3::com::qualcomm::qti::telephony;
 using RadioSvcTypes = RadioSvc::RadioSvcTypes;
 using SimSvcTypes = SimSvc::SimSvcTypes;
 using InfoSvcTypes = InfoSvc::InfoSvcTypes;
