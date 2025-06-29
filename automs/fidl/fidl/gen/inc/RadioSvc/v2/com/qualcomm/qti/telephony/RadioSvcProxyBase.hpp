@@ -55,6 +55,9 @@ public:
     typedef CommonAPI::Event<
         ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioCellInfoStatusT
     > CellInfoEvent;
+    typedef CommonAPI::Event<
+        ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::ValueState, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::PhoneIdT, ::v2::com::qualcomm::qti::telephony::RadioSvcTypes::RadioRatT
+    > RadioRatEvent;
 
     typedef std::function<void(const CommonAPI::CallStatus&, const int32_t&, const uint32_t&, const RadioSvcTypes::TelephonyResultT&)> GetGsmSignalMetricsAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const int32_t&, const uint32_t&, const int32_t&, const RadioSvcTypes::TelephonyResultT&)> GetUmtsSignalMetricsAsyncCallback;
@@ -69,10 +72,12 @@ public:
     typedef std::function<void(const CommonAPI::CallStatus&, const RadioSvcTypes::RadioNrDcnrRestrictionT&, const RadioSvcTypes::TelephonyResultT&)> GetNrDualConnectivityStatusAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const RadioSvcTypes::TelephonyResultT&)> SetSignalStrengthReportingCriteriaAsyncCallback;
     typedef std::function<void(const CommonAPI::CallStatus&, const RadioSvcTypes::RadioNetRegStateT&, const RadioSvcTypes::TelephonyResultT&)> GetPacketSwitchedStateAsyncCallback;
+    typedef std::function<void(const CommonAPI::CallStatus&, const RadioSvcTypes::RadioStateT&, const RadioSvcTypes::TelephonyResultT&)> GetRadioStateAsyncCallback;
 
     virtual SignalStrengthEvent& getSignalStrengthEvent() = 0;
     virtual RadioStateEvent& getRadioStateEvent() = 0;
     virtual CellInfoEvent& getCellInfoEvent() = 0;
+    virtual RadioRatEvent& getRadioRatEvent() = 0;
     virtual void GetGsmSignalMetrics(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, int32_t &_rssi, uint32_t &_ber, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetGsmSignalMetricsAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetGsmSignalMetricsAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual void GetUmtsSignalMetrics(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, int32_t &_ss, uint32_t &_ber, int32_t &_rscp, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info = nullptr) = 0;
@@ -99,6 +104,8 @@ public:
     virtual std::future<CommonAPI::CallStatus> SetSignalStrengthReportingCriteriaAsync(const RadioSvcTypes::PhoneIdT &_phoneId, const RadioSvcTypes::RadioSigTypeT &_sigType, const RadioSvcTypes::RadioSigStrengthIndicationT &_ind, const RadioSvcTypes::RadioSigStrengthHysteresisT &_hyst, SetSignalStrengthReportingCriteriaAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual void GetPacketSwitchedState(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, RadioSvcTypes::RadioNetRegStateT &_netReg, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info = nullptr) = 0;
     virtual std::future<CommonAPI::CallStatus> GetPacketSwitchedStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetPacketSwitchedStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual void GetRadioState(RadioSvcTypes::PhoneIdT _phoneId, CommonAPI::CallStatus &_internalCallStatus, RadioSvcTypes::RadioStateT &_radioState, RadioSvcTypes::TelephonyResultT &_result, const CommonAPI::CallInfo *_info = nullptr) = 0;
+    virtual std::future<CommonAPI::CallStatus> GetRadioStateAsync(const RadioSvcTypes::PhoneIdT &_phoneId, GetRadioStateAsyncCallback _callback = nullptr, const CommonAPI::CallInfo *_info = nullptr) = 0;
 
     virtual std::future<void> getCompletionFuture() = 0;
 };
@@ -111,6 +118,6 @@ public:
 
 
 // Compatibility
-namespace v2_0 = v2;
+namespace v2_1 = v2;
 
 #endif // V2_COM_QUALCOMM_QTI_TELEPHONY_Radio_Svc_PROXY_BASE_HPP_
