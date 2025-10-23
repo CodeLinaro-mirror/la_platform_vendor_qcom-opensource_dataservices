@@ -503,6 +503,8 @@ static int rmnet_get_ack(rmnetctl_hndl_t *hndl, uint16_t *error_code)
 	} ack;
 	int i;
 
+	memset(&ack,0, sizeof(struct nlack));
+
 	if (!hndl || !error_code)
 		return RMNETCTL_INVALID_ARG;
 
@@ -818,6 +820,8 @@ int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 		*error_code = errno;
 		return RMNETCTL_LIB_ERR;
 	}
+
+	memset(resp,0,resp_len);
 
 	resp_len = recv(hndl->netlink_fd, (char *)resp, (size_t)resp_len, 0);
 	if (resp_len < 0) {
