@@ -33,7 +33,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*
  *  Changes from Qualcomm Innovation Center are provided under the following license:
  *
- *  Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+ *  Copyright (c) Qualcomm Innovation Center, Inc. All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted (subject to the limitations in the
@@ -664,6 +664,7 @@ int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 	struct rtattr *tb[__RMNETCTL_IFLA_MAX];
 	unsigned int devindex = 0;
 	int resp_len;
+	char *buffer = NULL;
 
 	memset(&req, 0, sizeof(req));
 
@@ -690,7 +691,7 @@ int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 		return RMNETCTL_LIB_ERR;
 	}
 
-	resp_len = recv(hndl->netlink_fd, NULL, 0, MSG_PEEK | MSG_TRUNC);
+	resp_len = recv(hndl->netlink_fd, buffer, 0, MSG_PEEK | MSG_TRUNC);
 	if (resp_len < 0) {
 		*error_code = errno;
 		return RMNETCTL_API_ERR_MESSAGE_RECEIVE;
