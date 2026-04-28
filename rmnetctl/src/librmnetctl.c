@@ -29,9 +29,9 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Changes from Qualcomm Innovation Center are provided under the following license:
+Changes from Qualcomm Technologies, Inc. are provided under the following license:
 
-  Copyright (c) 2022, 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+  Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
   SPDX-License-Identifier: BSD-3-Clause-Clear
 
 ******************************************************************************/
@@ -503,6 +503,8 @@ static int rmnet_get_ack(rmnetctl_hndl_t *hndl, uint16_t *error_code)
 	} ack;
 	int i;
 
+	memset(&ack, 0, sizeof(ack));
+
 	if (!hndl || !error_code)
 		return RMNETCTL_INVALID_ARG;
 
@@ -818,6 +820,8 @@ int rtrmnet_ctl_getvnd(rmnetctl_hndl_t *hndl, char *vndname,
 		*error_code = errno;
 		return RMNETCTL_LIB_ERR;
 	}
+
+	memset(resp, 0, resp_len);
 
 	resp_len = recv(hndl->netlink_fd, (char *)resp, (size_t)resp_len, 0);
 	if (resp_len < 0) {
