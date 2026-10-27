@@ -9,13 +9,16 @@ soong_config_module_type {
         "cppflags",
         "srcs",
         "shared_libs",
+        "enabled",
     ],
 }
 
 automs_cc_defaults {
     name: "automs_defaults",
+    enabled: false,
     soong_config_variables: {
         targetauto: {
+            enabled: true,
             srcs: [
                 "./fidl/gen/src/SimSvc/v1/com/qualcomm/qti/telephony/*.cpp",
                 "./fidl/gen/src/InfoSvc/v1/com/qualcomm/qti/telephony/*.cpp",
